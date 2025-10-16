@@ -1,0 +1,690 @@
+/* Color principal para títulos y enlaces destacados */
+.color-principal {
+  color: #0f2faf !important;
+}
+
+/* Enlaces de productos sin subrayado y color heredado */
+.link-producto {
+  text-decoration: none;
+  color: inherit;
+}
+
+.link-producto:hover,
+.link-producto:focus {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Input cantidad en detalle-producto */
+.input-cantidad {
+  width: 100px;
+  display: inline-block;
+}
+
+/* Header y carrito estilos extraídos de los HTML */
+.header-tienda {
+  background: #264eeb;
+  color: white;
+}
+
+.header-titulo {
+  font-size: 1.5rem;
+}
+
+.carrito-contador-badge {
+  font-size: 0.9rem;
+}
+
+.carrito-iva-text {
+  color: #555;
+  font-size: 0.95rem;
+}
+
+/* Carrito: Subtotal e IVA en columna */
+.carrito-iva-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.1em;
+}
+
+.carrito-iva-item {
+  color: #888;
+  font-size: 1.05em;
+}
+
+body {
+  background-color: #fafafa;
+}
+
+.precio {
+  display: block;
+  margin: 50px 0;
+  color: #000000;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.precio-oferta {
+  color: #1466a9;
+  font-weight: bold;
+  font-size: 2rem;
+  margin-bottom: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.precio-tachado {
+  text-decoration: line-through;
+  color: #ff0000;
+  font-size: 1.3rem;
+  margin-right: 0;
+  margin-bottom: 0.5rem;
+}
+
+.badge-sale {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #434649;
+  color: #fff;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.25rem;
+  font-size: 0.8rem;
+}
+
+
+.nav .nav-link {
+  color: white !important;
+}
+
+/* Detalle de producto */
+.detalle-container {
+  margin-top: 2rem;
+}
+
+.detalle-img {
+  width: 100%;
+  max-width: 400px;
+  height: 400px;
+  object-fit: contain;
+  background: #f8f9fa;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.detalle-precio {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #1466a9;
+}
+
+.detalle-precio-oferta {
+  color: #1466a9;
+  font-size: 2.2rem;
+  font-weight: bold;
+}
+
+.detalle-precio-tachado {
+  text-decoration: line-through;
+  color: #6c757d;
+  font-size: 1.4rem;
+  margin-right: 10px;
+}
+
+.detalle-id {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+}
+
+.card .btn {
+  width: auto !important;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card-img-top {
+  height: 160px;
+  width: 100%;
+  object-fit: contain;
+  background: #fff;
+  padding: 10px;
+  display: block;
+}
+
+.span {
+  font-size: 0.9rem;
+}
+
+.titulo-limpifresh {
+  text-decoration: none;
+  color: white;
+}
+
+
+.logo-limpifresh {
+  max-width: 150px;
+  width: 50%;
+  height: 100%;
+  display: block;
+  margin: 100px auto;
+}
+
+/* Botón de pago del carrito  */
+.btn-pagar {
+  background-color: #1466a9;
+  /* Verde LimpiFresh */
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.btn-pagar:hover {
+  background-color: #26736c;
+  /* tono más oscuro al pasar el mouse */
+  color: #fff;
+}
+
+
+:root {
+  --lf-primary: #2a9d8f;
+  --lf-primary-dark: #207a72;
+  --lf-bg: #f9f9f9;
+  --lf-surface: #ffffff;
+  --lf-border: #dcdcdc;
+  --lf-text: #333;
+  --lf-muted: #666;
+}
+
+/* Fondo general */
+.mv-auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lf-bg);
+  padding: 24px;
+}
+
+/* Oculta el header si se desea pantalla limpia */
+.mv-auth-hide-header .header-tienda {
+  display: none !important;
+}
+
+/* Tarjeta principal */
+.mv-card {
+  width: 100%;
+  max-width: 520px;
+  /* mismo ancho para login y registro */
+  background: var(--lf-surface);
+  border: 1px solid var(--lf-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  color: var(--lf-text);
+  padding: 32px 26px;
+  margin: 0 auto;
+}
+
+/* Centrado del contenido */
+.mv-card .card-body,
+.mv-card form {
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Título */
+.mv-card h2 {
+  text-align: center;
+  font-weight: 700;
+  color: var(--lf-primary);
+  margin-bottom: 20px;
+}
+
+/* Tabs superiores */
+.mv-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.mv-tab {
+  border: 1px solid var(--lf-border);
+  border-radius: 8px;
+  padding: 6px 14px;
+  text-decoration: none;
+  color: var(--lf-primary);
+  font-weight: 600;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.mv-tab:hover {
+  background: #e8f6f3;
+}
+
+.mv-tab.mv-active {
+  background: var(--lf-primary);
+  color: white;
+  border-color: var(--lf-primary);
+}
+
+/* Inputs */
+.mv-input.form-control,
+.mv-input.form-select {
+  background: #fff;
+  border: 1px solid var(--lf-border);
+  border-radius: 8px;
+  color: var(--lf-text);
+  height: 46px;
+  transition: border-color 0.2s ease;
+}
+
+.mv-input::placeholder {
+  color: #999;
+}
+
+.mv-input:focus {
+  border-color: var(--lf-primary);
+  box-shadow: 0 0 0 0.15rem rgba(42, 157, 143, 0.25);
+}
+
+/* Botón principal */
+.mv-btn {
+  background: var(--lf-primary);
+  border: none;
+  color: white;
+  font-weight: 700;
+  height: 46px;
+  border-radius: 8px;
+  width: 100%;
+  transition: background 0.2s ease;
+}
+
+.mv-btn:hover {
+  background: var(--lf-primary-dark);
+}
+
+/* Textos pequeños */
+.mv-hint {
+  color: var(--lf-muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* Enlaces */
+.mv-link {
+  color: var(--lf-primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.mv-link:hover {
+  text-decoration: underline;
+}
+
+/* Ajuste para pantallas pequeñas */
+@media (max-width: 576px) {
+  .mv-card {
+    max-width: 90%;
+    padding: 24px 20px;
+  }
+}
+
+
+header a:hover,
+header a:focus,
+header a:active {
+  text-decoration: none;
+  opacity: .85;
+}
+
+/* cuerpo */
+body {
+  background: #fafafa;
+  padding-top: 80px;
+}
+
+.mv-card {
+  border: none;
+  border-radius: 12px;
+}
+
+
+/* Barra superior */
+header {
+  width: 100%;
+  background-color: #2a9d8f;
+  color: white;
+  text-align: center;
+  padding: 0.8rem 0;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+header a {
+  color: white;
+  text-decoration: none;
+  font-weight: 400;
+  transition: opacity 0.2s ease;
+}
+
+header a:hover,
+header a:focus,
+header a:active {
+  text-decoration: none;
+  opacity: 0.85;
+}
+
+body {
+  background-color: #fafafa;
+  padding-top: 80px;
+}
+
+.mv-card {
+  border: none;
+  border-radius: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.mv-tabs a {
+  pointer-events: auto !important;
+}
+
+/*  Mostrar/Ocultar contraseña    */
+.password-container {
+  position: relative;
+}
+
+.label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.eye-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #2a9d8f;
+  padding: 2px 4px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.eye-btn:hover {
+  background: #e3f3f0;
+  color: #238779;
+}
+
+.eye-btn img {
+  width: 20px;
+  height: 20px;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.eye-btn:hover img {
+  opacity: 1;
+}
+
+/*  Carrusel de marcas / productos destacados  */
+
+.carousel-marcas .carousel-inner {
+  background: #ffffff;
+  border-radius: 12px;
+}
+
+.carousel-marcas .slide-frame {
+  height: 380px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.carousel-marcas .slide-img {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  image-rendering: auto;
+}
+
+.carousel-marcas .carousel-caption {
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.carousel-marcas .carousel-control-prev-icon,
+.carousel-marcas .carousel-control-next-icon {
+  filter: invert(1);
+}
+
+@media (max-width: 576px) {
+  .carousel-marcas .slide-frame {
+    height: 280px;
+    padding: 10px;
+  }
+
+  .carousel-marcas .carousel-caption {
+    font-size: 0.9rem;
+    padding: 8px 10px;
+  }
+}
+
+
+/* ====== Nosotros (About) - estilos específicos ====== */
+
+/* Sección hero (intro) */
+.about-hero {
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+  border: 1px solid #e9ecef;
+}
+
+.about-hero-img {
+  max-height: 260px;
+  object-fit: contain;
+}
+
+/* Tarjetas de servicios */
+.service-card {
+  background-color: #ffffff;
+  border: 1px solid #e9ecef;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .08);
+}
+
+.service-icon i {
+  font-size: 2rem;
+  /* tamaño icono */
+  color: var(--bs-teal);
+  /* puedes cambiar por tu color principal */
+}
+
+/* Utilidades visuales */
+.sombra-suave {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .10);
+  border: 1px solid #e9ecef;
+}
+
+/* Responsive menor */
+@media (max-width: 576px) {
+  .about-hero-img {
+    max-height: 200px;
+  }
+}
+
+/* === Añadidos del primer CSS: Pestañas de Detalle de Producto === */
+#tabs-detalle .nav-link {
+  color: #000 !important;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  margin-bottom: -1px;
+  /* se une visualmente con el contenido */
+}
+
+#tabs-detalle .nav-link:hover,
+#tabs-detalle .nav-link:focus {
+  color: #000 !important;
+  background-color: #ffffff;
+}
+
+#tabs-detalle .nav-link.active {
+  color: #000 !important;
+  background-color: #fff;
+  border-color: #dee2e6 #dee2e6 #fff;
+  /* sin borde inferior */
+}
+
+/* ===== Colores LimpiFresh ===== */
+:root {
+  --lf-brand: #3f46ff;
+  --lf-brand-dark: #2e34d6;
+  --lf-icon-bg: #ebedff;
+  --lf-icon-fg: #3f46ff;
+}
+
+/* Navbar */
+.bg-brand {
+  background: var(--lf-brand) !important;
+}
+
+.lf-navbar .navbar-brand {
+  color: #fff;
+}
+
+.lf-navbar .nav-link {
+  color: #fff;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.lf-navbar .nav-link:hover,
+.lf-navbar .nav-link.active {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.lf-navbar .btn-light {
+  background: #fff;
+  color: #000;
+  font-weight: 500;
+  border: none;
+}
+
+.lf-navbar .btn-light:hover {
+  background: #f3f4ff;
+}
+
+.lf-navbar .badge {
+  font-size: 0.65rem;
+  padding: 0.3rem 0.4rem;
+}
+
+/* Main */
+.lf-eyebrow {
+  color: var(--lf-brand);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.lf-title {
+  font-size: clamp(1.8rem, 1rem + 2vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.lf-form .lf-input {
+  border: 1px solid #e3e5ef;
+  border-radius: 0.6rem;
+  padding: 0.8rem;
+}
+
+.lf-form .lf-input:focus {
+  border-color: var(--lf-brand);
+  box-shadow: 0 0 0 0.2rem rgba(63, 70, 255, 0.15);
+}
+
+.lf-btn {
+  background: var(--lf-brand);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 0.6rem;
+}
+
+.lf-btn:hover {
+  background: var(--lf-brand-dark);
+}
+
+/* Tarjetas */
+.lf-card {
+  border: 1px solid #e3e5ef;
+  border-radius: 0.8rem;
+  background: #fff;
+  gap: 0.7rem;
+}
+
+.lf-icon {
+  background: var(--lf-icon-bg);
+  color: var(--lf-icon-fg);
+  border-radius: 50%;
+  font-size: 1.25rem;
+  width: 45px;
+  height: 45px;
+  display: grid;
+  place-items: center;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+header.lf-navbar {
+  margin-top: 0;
+}
+
+.btn-success {
+  background-color: #3f46ff !important;
+  border-color: #3f46ff !important;
+  color: #fff !important;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-success:hover {
+  background-color: #2e34d6 !important;
+  border-color: #2e34d6 !important;
+  transform: scale(1.05);
+}
