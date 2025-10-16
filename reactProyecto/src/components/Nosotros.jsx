@@ -38,7 +38,7 @@ function Nosotros() {
                     <div className="col-md-6">
                         <h3 className="fw-semibold mb-3">FreshComunity</h3>
                         <p className="mb-0">
-                            En Limpifresh somos más que una tienda de limpieza: somos parte de FreshComunity, una comunidad
+                            En LimpiFresh somos más que una tienda de limpieza: somos parte de FreshComunity, una comunidad
                             comprometida con el bienestar, la higiene y el cuidado de nuestros espacios compartidos.
                             Creemos que la limpieza no solo transforma lugares, sino también la forma en que vivimos. Por
                             eso trabajamos día a día para ofrecerte productos de calidad, precios justos y un servicio
