@@ -1,13 +1,13 @@
+// src/pages/Admin.jsx
 import React, { useState, useEffect } from 'react';
 import { useUser } from '../contexts/UserContext.jsx';
 import { useNavigate } from 'react-router-dom';
-
+import { products as siteProducts } from '../data/products.js';
 
 export default function Admin() {
   const { user } = useUser();
   const navigate = useNavigate();
 
-  // If user isn't admin, redirect away
   useEffect(() => {
     if (!user || !user.isAdmin) {
       navigate('/');
@@ -27,7 +27,7 @@ export default function Admin() {
     stock: '',
   });
 
-  // Load products from storage on mount
+  // Cargar productos CRUD (localStorage)
   useEffect(() => {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
@@ -37,20 +37,17 @@ export default function Admin() {
           setProducts(parsed);
           return;
         }
-      } catch {
-        /* ignore parse error */
-      }
+      } catch {}
     }
-    // Seed with empty array if nothing exists
     setProducts([]);
   }, []);
 
-  // Persist products when they change
+  // Persistir CRUD
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
   }, [products]);
 
-  // Format number as CLP
+  // Helpers
   const toInt = (v) => {
     if (typeof v === 'number') return Math.round(v);
     const n = String(v).replace(/[^0-9-]/g, '');
@@ -58,19 +55,15 @@ export default function Admin() {
   };
   const formatCLP = (n) => '$' + toInt(n).toLocaleString('es-CL');
 
-  // Handle changes in form inputs
+  // Handlers CRUD
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
   };
-
-  // Clear form
   const clearForm = () => {
     setForm({ nombre: '', desc: '', precio: '', iva: DEFAULT_IVA, stock: '' });
     setEditingIndex(null);
   };
-
-  // Submit form (add or update product)
   const handleSubmit = (e) => {
     e.preventDefault();
     const name = form.nombre.trim();
@@ -78,46 +71,26 @@ export default function Admin() {
     const price = toInt(form.precio);
     const iva = toInt(form.iva);
     const stock = toInt(form.stock);
-    if (!name) {
-      alert('Ingresa el nombre del producto.');
-      return;
-    }
-    if (price <= 0) {
-      alert('Ingresa un precio válido.');
-      return;
-    }
-    if (stock < 0) {
-      alert('Ingresa un stock válido (0 o más).');
-      return;
-    }
-    if (iva < 0) {
-      alert('Ingresa un IVA válido (0 o más).');
-      return;
-    }
+    if (!name) return alert('Ingresa el nombre del producto.');
+    if (price <= 0) return alert('Ingresa un precio válido.');
+    if (stock < 0) return alert('Ingresa un stock válido (0 o más).');
+    if (iva < 0) return alert('Ingresa un IVA válido (0 o más).');
+
     const payload = { name, desc, price, stock, iva };
     setProducts((prev) => {
-      if (editingIndex === null) {
-        return [...prev, payload];
-      } else {
-        const copy = [...prev];
-        copy[editingIndex] = payload;
-        return copy;
-      }
+      if (editingIndex === null) return [...prev, payload];
+      const copy = [...prev];
+      copy[editingIndex] = payload;
+      return copy;
     });
     clearForm();
   };
-
-  // Delete product
   const handleDelete = (index) => {
     if (window.confirm('¿Eliminar este producto?')) {
       setProducts((prev) => prev.filter((_, i) => i !== index));
-      if (editingIndex === index) {
-        clearForm();
-      }
+      if (editingIndex === index) clearForm();
     }
   };
-
-  // Edit product
   const handleEdit = (index) => {
     const p = products[index];
     setForm({
@@ -128,92 +101,81 @@ export default function Admin() {
       stock: p.stock,
     });
     setEditingIndex(index);
-    // Scroll to form
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // ====== Catálogo del sitio (solo lectura, sin ofertas) ======
+  const [catFilter, setCatFilter] = useState('Todas');
+  const [q, setQ] = useState('');
+  const categorias = ['Todas', ...Array.from(new Set(siteProducts.map(p => p.categoria)))];
+
+  const filteredSite = siteProducts.filter(p => {
+    const byCat = catFilter === 'Todas' || p.categoria === catFilter;
+    const byText = !q || String(p.nombre).toLowerCase().includes(q.toLowerCase());
+    return byCat && byText;
+  });
+
+  // ====== Blogs (solo vista) ======
+  const blogs = [
+    {
+      id: 1,
+      titulo: 'Bolsas 100% ecológicas',
+      descripcion: 'Conoce cómo las bolsas biodegradables ayudan al medio ambiente.',
+      imagen: '/img/Bolsas.jpg',
+      fecha: '15 Octubre 2025',
+    },
+    {
+      id: 2,
+      titulo: 'Escobas de material reciclado',
+      descripcion: 'Escobas fabricadas con materiales reciclados y resistentes.',
+      imagen: '/img/escoba.jpg',
+      fecha: '12 Octubre 2025',
+    },
+    {
+      id: 3,
+      titulo: 'Detergentes sin químicos agresivos',
+      descripcion: 'Cuidan tus prendas y el medio ambiente.',
+      imagen: '/img/Detergente.jpg',
+      fecha: '10 Octubre 2025',
+    },
+  ];
+
+  // No-ops para botones visuales
+  const noop = (e) => e.preventDefault();
 
   return (
     <div className="container py-4">
       <h1 className="text-center mb-4">Panel de Administración</h1>
-      {/* Formulario */}
+
+      {/* ====== Formulario CRUD ====== */}
       <section className="card shadow-sm p-4 mb-5">
         <h2 className="mb-3">Agregar / Editar Producto</h2>
         <form onSubmit={handleSubmit} autoComplete="off">
           <div className="mb-3">
-            <label htmlFor="nombre" className="form-label">
-              Nombre del producto
-            </label>
-            <input
-              id="nombre"
-              name="nombre"
-              type="text"
-              className="form-control"
-              value={form.nombre}
-              onChange={handleChange}
-              required
-            />
+            <label htmlFor="nombre" className="form-label">Nombre del producto</label>
+            <input id="nombre" name="nombre" type="text" className="form-control"
+              value={form.nombre} onChange={handleChange} required />
           </div>
           <div className="mb-3">
-            <label htmlFor="desc" className="form-label">
-              Descripción
-            </label>
-            <textarea
-              id="desc"
-              name="desc"
-              className="form-control"
-              rows="3"
-              value={form.desc}
-              onChange={handleChange}
-            />
+            <label htmlFor="desc" className="form-label">Descripción</label>
+            <textarea id="desc" name="desc" className="form-control" rows="3"
+              value={form.desc} onChange={handleChange} />
           </div>
           <div className="row g-3">
             <div className="col-md-4">
-              <label htmlFor="precio" className="form-label">
-                Precio (sin IVA)
-              </label>
-              <input
-                id="precio"
-                name="precio"
-                type="number"
-                min="0"
-                step="1"
-                className="form-control"
-                value={form.precio}
-                onChange={handleChange}
-                required
-              />
+              <label htmlFor="precio" className="form-label">Precio (sin IVA)</label>
+              <input id="precio" name="precio" type="number" min="0" step="1"
+                className="form-control" value={form.precio} onChange={handleChange} required />
             </div>
             <div className="col-md-4">
-              <label htmlFor="iva" className="form-label">
-                IVA %
-              </label>
-              <input
-                id="iva"
-                name="iva"
-                type="number"
-                min="0"
-                step="1"
-                className="form-control"
-                value={form.iva}
-                onChange={handleChange}
-                required
-              />
+              <label htmlFor="iva" className="form-label">IVA %</label>
+              <input id="iva" name="iva" type="number" min="0" step="1"
+                className="form-control" value={form.iva} onChange={handleChange} required />
             </div>
             <div className="col-md-4">
-              <label htmlFor="stock" className="form-label">
-                Stock
-              </label>
-              <input
-                id="stock"
-                name="stock"
-                type="number"
-                min="0"
-                step="1"
-                className="form-control"
-                value={form.stock}
-                onChange={handleChange}
-                required
-              />
+              <label htmlFor="stock" className="form-label">Stock</label>
+              <input id="stock" name="stock" type="number" min="0" step="1"
+                className="form-control" value={form.stock} onChange={handleChange} required />
             </div>
           </div>
           <div className="d-flex gap-2 justify-content-end mt-4">
@@ -226,13 +188,12 @@ export default function Admin() {
           </div>
         </form>
       </section>
-      {/* Tabla de productos */}
-      <section className="card shadow-sm p-4">
+
+      {/* ====== Tabla de Productos CRUD ====== */}
+      <section className="card shadow-sm p-4 mb-5">
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h4 className="mb-0">Productos</h4>
-          <span className="badge bg-brand text-white">
-            IVA actual: {form.iva || DEFAULT_IVA}%
-          </span>
+          <span className="badge bg-brand text-white">IVA actual: {form.iva || DEFAULT_IVA}%</span>
         </div>
         <div className="table-responsive">
           <table className="table table-striped align-middle">
@@ -257,31 +218,110 @@ export default function Admin() {
                     <td>{formatCLP(priceWithIVA)}</td>
                     <td>{p.stock}</td>
                     <td className="d-flex gap-2">
-                      <button
-                        className="btn btn-outline-primary btn-sm"
-                        onClick={() => handleEdit(i)}
-                      >
-                        Editar
-                      </button>
-                        <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => handleDelete(i)}
-                      >
-                        Eliminar
-                      </button>
+                      <button className="btn btn-outline-primary btn-sm" onClick={() => handleEdit(i)}>Editar</button>
+                      <button className="btn btn-danger btn-sm" onClick={() => handleDelete(i)}>Eliminar</button>
                     </td>
                   </tr>
                 );
               })}
               {products.length === 0 && (
                 <tr>
-                  <td colSpan="6" className="text-center text-muted">
-                    No hay productos.
-                  </td>
+                  <td colSpan="6" className="text-center text-muted">No hay productos.</td>
                 </tr>
               )}
             </tbody>
           </table>
+        </div>
+      </section>
+
+      {/*  Catálogo del Sitio  */}
+      <section className="card shadow-sm p-4 mb-5">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h2 className="mb-0">Catálogo del sitio</h2>
+        </div>
+
+        <div className="table-responsive">
+          <table className="table table-striped align-middle">
+            <thead className="table-dark">
+              <tr>
+                <th style={{ width: 70 }}>ID</th>
+                <th style={{ width: 84 }}>Img</th>
+                <th>Nombre</th>
+                <th style={{ width: 180 }}>Categoría</th>
+                <th style={{ width: 180 }}>Precio</th>
+                <th style={{ width: 160 }}>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredSite.map((p) => (
+                <tr key={p.id}>
+                  <td>{p.id}</td>
+                  <td>
+                    <div className="admin-thumb">
+                      <img
+                        src={p.img}
+                        alt={p.nombre}
+                        onError={(e) => (e.currentTarget.src = '/img/placeholder.png')}
+                      />
+                    </div>
+                  </td>
+                  <td>
+                    <div className="fw-semibold">{p.nombre}</div>
+                    <small className="text-muted">{p.desc}</small>
+                  </td>
+                  <td>{p.categoria}</td>
+                  <td>{formatCLP(p.precio)}</td>
+                  <td className="d-flex gap-2">
+                    <button className="btn btn-outline-primary btn-sm" onClick={noop} title="Acción visual">
+                      Editar
+                    </button>
+                    <button className="btn btn-danger btn-sm" onClick={noop} title="Acción visual">
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {filteredSite.length === 0 && (
+                <tr>
+                  <td colSpan="6" className="text-center text-muted">Sin resultados.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/*  Administrar Blogs  */}
+      <section className="card shadow-sm p-4 mb-5">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h2 className="mb-0">Administrar Blogs</h2>
+        </div>
+
+        <div className="row g-4">
+          {blogs.map((b) => (
+            <div key={b.id} className="col-md-4">
+              <div className="card h-100 shadow-sm">
+                <img src={b.imagen} className="card-img-top" alt={b.titulo} />
+                <div className="card-body">
+                  <h5 className="fw-bold">{b.titulo}</h5>
+                  <p className="text-muted">{b.descripcion}</p>
+                </div>
+                <div className="card-footer d-flex justify-content-between align-items-center">
+                  <div className="d-flex gap-2">
+                    <button className="btn btn-outline-primary btn-sm" onClick={noop} title="Acción visual">
+                      Editar
+                    </button>
+                    <button className="btn btn-danger btn-sm" onClick={noop} title="Acción visual">
+                      Eliminar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+          {blogs.length === 0 && (
+            <div className="col-12 text-center text-muted">No hay artículos de blog.</div>
+          )}
         </div>
       </section>
     </div>
