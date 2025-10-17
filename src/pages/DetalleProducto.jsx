@@ -3,9 +3,14 @@ import { useParams } from 'react-router-dom';
 import { getProductById } from '../data/products.js';
 import { useCart } from '../contexts/CartContext.jsx';
 
+function resolveImage(img) {
+  if (!img) return '';
+  const file = img.split('/').pop();
+  return new URL(`/src/assets/img/${file}`, import.meta.url).href;
+}
 
 function generateSku(id) {
-  return `SKU-${id}${Math.floor(100000 + Math.random() * 900000)}`;
+  return `SKU-${id}`;
 }
 
 export default function DetalleProducto() {
@@ -23,105 +28,123 @@ export default function DetalleProducto() {
     );
   }
 
+  const price = product.oferta && product.precioOferta ? product.precioOferta : product.precio;
+
   const handleAdd = () => {
     addItem(product, quantity);
     setQuantity(1);
   };
 
-  const price = product.oferta && product.precioOferta ? product.precioOferta : product.precio;
-
   return (
     <div className="container py-4">
-      <div className="row g-4">
-        {/* Product image */}
+      {/* ==== Bloque principal (imagen + info) ==== */}
+      <div className="row g-4 align-items-start">
         <div className="col-md-5 text-center">
-          <img
-            src={product.img}
-            alt={product.nombre}
-            className="img-fluid rounded"
-            style={{ maxHeight: '400px', objectFit: 'cover' }}
-          />
+          <div className="dp-img-wrap mx-auto">
+            <img
+              src={resolveImage(product.img)}
+              alt={product.nombre}
+              className="dp-img"
+              loading="lazy"
+            />
+          </div>
         </div>
-        {/* Product details */}
         <div className="col-md-7">
-          <h2 className="fw-bold mb-2">{product.nombre}</h2>
-          <p className="text-muted mb-1">ID: {generateSku(product.id)}</p>
-          <p className="text-muted">{product.desc}</p>
-          <div className="my-3">
+          <div className="d-flex align-items-start justify-content-between mb-2">
+            <h2 className="fw-bold mb-0">{product.nombre}</h2>
+            <small className="text-muted ms-3">ID: {generateSku(product.id)}</small>
+          </div>
+
+          <div className="dp-price my-2">
             {product.oferta ? (
               <>
-                <span className="fw-bold h4 text-danger me-2">
-                  ${product.precioOferta.toLocaleString()}
-                </span>
-                <span className="text-muted text-decoration-line-through">
+                <span className="dp-price-main">${product.precioOferta.toLocaleString()}</span>
+                <span className="text-muted text-decoration-line-through ms-2">
                   ${product.precio.toLocaleString()}
                 </span>
               </>
             ) : (
-              <span className="fw-bold h4">${product.precio.toLocaleString()}</span>
+              <span className="dp-price-main">${price.toLocaleString()}</span>
             )}
           </div>
-          <div className="d-flex align-items-center mb-3">
-            <label htmlFor="cantidad" className="me-2 fw-semibold mb-0">
-              Cantidad
-            </label>
+
+          <p className="text-muted mb-3">{product.desc}</p>
+
+          <div className="d-flex align-items-center gap-2 mb-3">
+            <label htmlFor="cantidad" className="fw-semibold mb-0">Cantidad:</label>
             <input
               id="cantidad"
               type="number"
-              className="form-control w-auto"
-              style={{ maxWidth: '90px' }}
               min="1"
+              className="form-control"
+              style={{ maxWidth: 90 }}
               value={quantity}
               onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
             />
           </div>
-          <button className="btn btn-success mb-3" onClick={handleAdd}>
+          <button className="btn btn-success" onClick={handleAdd}>
             Agregar al carrito
           </button>
-          {/* Tabs for description and characteristics */}
-          <ul className="nav nav-pills mb-3">
-            <li className="nav-item">
-              <button
-                className={`nav-link ${tab === 'caracteristicas' ? 'active' : ''}`}
-                onClick={() => setTab('caracteristicas')}
-              >
-                Características
-              </button>
-            </li>
-            <li className="nav-item">
-              <button
-                className={`nav-link ${tab === 'descripcion' ? 'active' : ''}`}
-                onClick={() => setTab('descripcion')}
-              >
-                Descripción
-              </button>
-            </li>
-          </ul>
-          {tab === 'caracteristicas' && (
-            <div className="table-responsive">
-              <table className="table table-bordered">
-                <tbody>
-                  {Object.keys(product.specs).length ? (
-                    Object.entries(product.specs).map(([campo, valor]) => (
-                      <tr key={campo}>
-                        <th className="fw-normal text-muted" style={{ width: '200px' }}>
-                          {campo}
-                        </th>
-                        <td>{valor}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td className="text-muted">Sin información adicional</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          )}
-          {tab === 'descripcion' && (
-            <p className="mt-3">{product.descripcionLarga}</p>
-          )}
+        </div>
+      </div>
+
+      <div className="mt-5">
+        <ul className="nav nav-tabs dp-tabs justify-content-start" role="tablist">
+          <li className="nav-item" role="presentation">
+            <button
+              className={`nav-link ${tab === 'caracteristicas' ? 'active' : ''}`}
+              onClick={() => setTab('caracteristicas')}
+              type="button"
+              role="tab"
+            >
+              Características
+            </button>
+          </li>
+          <li className="nav-item" role="presentation">
+            <button
+              className={`nav-link ${tab === 'descripcion' ? 'active' : ''}`}
+              onClick={() => setTab('descripcion')}
+              type="button"
+              role="tab"
+            >
+              Descripción
+            </button>
+          </li>
+        </ul>
+
+        <div className="card border-top-0 rounded-top-0 dp-tab-card">
+          <div className="card-body">
+            {tab === 'caracteristicas' ? (
+              <>
+                <h5 className="mb-3">Características</h5>
+                <div className="table-responsive">
+                  <table className="table align-middle mb-0">
+                    <tbody>
+                      {product.specs && Object.keys(product.specs).length ? (
+                        Object.entries(product.specs).map(([campo, valor]) => (
+                          <tr key={campo}>
+                            <th className="text-muted fw-normal" style={{ width: 260 }}>
+                              {campo}
+                            </th>
+                            <td className="fw-semibold">{valor}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td className="text-muted">Sin información adicional</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            ) : (
+              <>
+                <h5 className="mb-3">Descripción</h5>
+                <p className="mb-0">{product.descripcionLarga}</p>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

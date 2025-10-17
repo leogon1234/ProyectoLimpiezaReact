@@ -5,7 +5,7 @@ import ProductCard from '../components/ProductCard.jsx';
 
 export default function Home() {
 
-  const featured = products.slice(0, 3);
+  const featured = products.slice(0, 4);
 
   return (
     <div className="container my-5">

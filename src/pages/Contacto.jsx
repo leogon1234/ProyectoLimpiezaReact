@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
 
+const ASUNTOS = [
+  { value: '', label: 'Selecciona un asunto' },
+  { value: 'Reembolso', label: 'Reembolso' },
+  { value: 'Devolución', label: 'Devolución' },
+  { value: 'Cambio de producto', label: 'Cambio de producto' },
+  { value: 'Consulta', label: 'Consulta general' },
+  { value: 'Sugerencia', label: 'Sugerencia' },
+  { value: 'Reclamo', label: 'Reclamo' },
+];
 
 export default function Contacto() {
   const [form, setForm] = useState({ nombre: '', email: '', asunto: '', mensaje: '' });
@@ -59,15 +68,20 @@ export default function Contacto() {
                 />
               </div>
               <div className="col-12">
-                <input
+                <select
                   id="asunto"
-                  type="text"
-                  className="form-control lf-input"
-                  placeholder="Asunto"
+                  className="form-select lf-input"
                   name="asunto"
                   value={form.asunto}
                   onChange={handleChange}
-                />
+                  required
+                >
+                  {ASUNTOS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="col-12">
                 <textarea
