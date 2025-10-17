@@ -79,6 +79,14 @@ export default function BlogDetail() {
         <h2 className="fw-bold color-principal">{title}</h2>
         <p className="text-muted">Descubre historias, detalles ecológicos y curiosidades sobre nuestros productos.</p>
       </div>
+      <div className="text-center mb-4">
+        <img
+          src={`/img/muchasescobas.jpg`}
+          alt={title}
+          className="img-fluid rounded shadow-sm"
+          style={{ maxHeight: '500px', objectFit: 'contain', width: '100%' }}
+        />
+      </div>
       {sections.map((sec, index) => (
         <section key={index} className="mb-5">
           {sec.heading && <h3 className="fw-bold text-success mb-3">{sec.heading}</h3>}
