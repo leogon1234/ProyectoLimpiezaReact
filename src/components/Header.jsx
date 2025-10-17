@@ -1,110 +1,81 @@
-import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { useCart } from '../contexts/CartContext.jsx';
-import { useUser } from '../contexts/UserContext.jsx';
+import React from "react";
+import { Link } from "react-router-dom";
+import { useUser } from "../contexts/UserContext.jsx";
+import { useCart } from "../contexts/CartContext.jsx";
 
-/**
- * Navigation bar. Uses Bootstrap classes as defined in the original
- * project. The cart badge reflects the total quantity of items in
- * the cart by reading from the CartContext.
- */
 export default function Header() {
-  const { count } = useCart();
   const { user, logout } = useUser();
+  const { cart } = useCart();
 
   return (
-    <header className="lf-navbar navbar navbar-expand-lg navbar-dark bg-brand sticky-top shadow-sm">
-      <div className="container-fluid d-flex justify-content-between align-items-center">
-        <Link className="navbar-brand fw-bold d-flex align-items-center gap-2" to="/">
-          <img src="/img/logo.jpg" alt="Logo LimpiFresh" width="60" height="60" className="logo-img" />
-          LimpiFresh
+    <header className="navbar navbar-expand-lg navbar-dark bg-brand shadow-sm py-2">
+      <div className="container-fluid px-4">
+        {/* IZQUIERDA DEL HEADER */}
+        <Link to="/" className="navbar-brand d-flex align-items-center gap-2">
+          <img
+            src="/img/logo.jpg"
+            alt="Logo LimpiFresh"
+            width="45"
+            height="45"
+            className="rounded-circle border border-light"
+          />
+          <span className="fw-bold fs-5 text-white">LimpiFresh</span>
         </Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#lfNav"
-          aria-controls="lfNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse justify-content-center" id="lfNav">
-          <ul className="navbar-nav mb-2 mb-lg-0 gap-lg-3">
+
+        {/* CENTRO DEL HEADER */}
+        <div className="collapse navbar-collapse" id="navbarContent">
+          <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <NavLink className="nav-link" to="/" end>
-                Inicio
-              </NavLink>
+              <Link className="nav-link fw-semibold" to="/">Inicio</Link>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/productos">
-                Productos
-              </NavLink>
+              <Link className="nav-link fw-semibold" to="/productos">Productos</Link>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/ofertas">
-                Ofertas
-              </NavLink>
+              <Link className="nav-link fw-semibold" to="/ofertas">Ofertas</Link>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/nosotros">
-                Nosotros
-              </NavLink>
+              <Link className="nav-link fw-semibold" to="/nosotros">Nosotros</Link>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/contacto">
-                Contacto
-              </NavLink>
+              <Link className="nav-link fw-semibold" to="/contacto">Contacto</Link>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/blogs">
-                Blogs
-              </NavLink>
+              <Link className="nav-link fw-semibold" to="/blogs">Blog</Link>
             </li>
-            {user && user.isAdmin && (
+            {user?.isAdmin && (
               <li className="nav-item">
-                <NavLink className="nav-link" to="/admin">
-                  Panel
-                </NavLink>
+                <Link className="nav-link fw-semibold" to="/admin">Panel</Link>
               </li>
             )}
           </ul>
-        </div>
-        <div className="d-flex align-items-center gap-2 ms-auto">
-          {/* Authentication section */}
-          {user ? (
-            <div className="d-flex align-items-center gap-2">
-              <span className="text-white d-none d-md-inline">Hola, {user.name}</span>
-              <button
-                className="btn btn-light btn-sm rounded-3 d-flex align-items-center gap-1"
-                onClick={logout}
-              >
-                <i className="bi bi-box-arrow-right"></i>
-                <span className="d-none d-md-inline">Cerrar sesión</span>
-              </button>
-            </div>
-          ) : (
-            <Link
-              to="/login"
-              className="btn btn-light btn-sm rounded-3 d-flex align-items-center gap-1"
-            >
-              <i className="bi bi-person"></i>
-              <span className="d-none d-md-inline">Iniciar sesión</span>
-            </Link>
-          )}
-          <Link
-            to="/carrito"
-            className="btn btn-light btn-sm rounded-3 position-relative d-flex align-items-center gap-1"
-          >
-            <i className="bi bi-cart"></i>
-            <span className="d-none d-md-inline">Carrito</span>
-            {count > 0 && (
-              <span className="badge bg-danger rounded-pill position-absolute top-0 end-0 translate-middle">
-                {count}
-              </span>
+
+          {/* DERECHA DEL HEADER */}
+          <div className="d-flex align-items-center gap-2">
+            {user ? (
+              <>
+                <span className="text-white small me-1">
+                  Hola, <strong>{user.isAdmin ? "Administrador" : user.name}</strong>
+                </span>
+                <button
+                  className="btn btn-light btn-sm"
+                  onClick={logout}
+                >
+                  Cerrar sesión
+                </button>
+              </>
+            ) : (
+              <Link to="/login" className="btn btn-light btn-sm">
+                Iniciar sesión
+              </Link>
             )}
-          </Link>
+            <Link to="/carrito" className="btn btn-outline-light btn-sm d-flex align-items-center">
+              <i className="bi bi-cart3 me-1"></i> Carrito
+              {cart.length > 0 && (
+                <span className="badge bg-light text-dark ms-2">{cart.length}</span>
+              )}
+            </Link>
+          </div>
         </div>
       </div>
     </header>

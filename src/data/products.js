@@ -1,7 +1,7 @@
 export const products = [
   {
     id: 1,
-    nombre: 'Detergente Líquido',
+    nombre: 'Detergente Líquido 900ml',
     desc: 'Ideal para ropa y superficies.',
     img: '/img/Detergente.jpg',
     precio: 5990,
@@ -23,7 +23,7 @@ export const products = [
   },
   {
     id: 2,
-    nombre: 'Cloro Desinfectante',
+    nombre: 'Cloro Desinfectante 1L',
     desc: 'Elimina el 99.9% de bacterias.',
     img: '/img/Cloro.jpg',
     precio: 2500,
@@ -45,7 +45,7 @@ export const products = [
   },
   {
     id: 3,
-    nombre: 'Escoba Multiuso',
+    nombre: 'Escoba Multiuso 1 unidad',
     desc: 'Perfecta para interiores y exteriores.',
     img: '/img/escoba.jpg',
     precio: 3500,
@@ -61,11 +61,12 @@ export const products = [
       Uso: 'Interior/Exterior',
       'País de Origen': 'Chile',
       'Garantía Mínima Legal': '6 meses',
+      'Tamaño del Producto': '120 cm de largo'
     },
   },
   {
     id: 4,
-    nombre: 'Guantes de Limpieza',
+    nombre: 'Guantes de Limpieza 1 par',
     desc: 'Protección para tus manos.',
     img: '/img/guantes.jpg',
     precio: 1500,
@@ -85,7 +86,7 @@ export const products = [
   },
   {
     id: 5,
-    nombre: 'Esponja Multiuso',
+    nombre: 'Esponja Multiuso 1 unidad',
     desc: 'Ideal para cocina y baño.',
     img: '/img/esponja.jpg',
     precio: 800,
@@ -104,7 +105,7 @@ export const products = [
   },
   {
     id: 6,
-    nombre: 'Limpiavidrios',
+    nombre: 'Limpiavidrios 500ml',
     desc: 'Brillo sin manchas.',
     img: '/img/limpiavidrios.jpg',
     precio: 3000,
@@ -125,7 +126,7 @@ export const products = [
   },
   {
     id: 7,
-    nombre: 'Trapo de Piso',
+    nombre: 'Trapo de Piso 1 unidad',
     desc: 'Absorbente y resistente.',
     img: '/img/trapo.jpg',
     precio: 1000,
@@ -141,11 +142,12 @@ export const products = [
       Contenido: '1 unidad',
       'País de Origen': 'Chile',
       'Garantía Mínima Legal': '3 meses',
+      'Tamaño del Producto': '60 cm x 40 cm'
     },
   },
   {
     id: 8,
-    nombre: 'Escobillón',
+    nombre: 'Escobillón 1 unidad',
     desc: 'Cerdas resistentes para exteriores.',
     img: '/img/escobillon.jpg',
     precio: 2200,
@@ -161,11 +163,12 @@ export const products = [
       Material: 'Plástico y fibras',
       'País de Origen': 'Chile',
       'Garantía Mínima Legal': '6 meses',
+      'Tamaño del Producto': '130 cm de largo'
     },
   },
   {
     id: 9,
-    nombre: 'Limpiapisos',
+    nombre: 'Limpiapisos 900ml',
     desc: 'Fragancia duradera.',
     img: '/img/limpiapisos.jpg',
     precio: 3500,
@@ -186,7 +189,7 @@ export const products = [
   },
   {
     id: 10,
-    nombre: 'Cepillo de Limpieza',
+    nombre: 'Cepillo de Limpieza 1 unidad',
     desc: 'Ideal para superficies difíciles.',
     img: '/img/cepillo.jpg',
     precio: 1800,
@@ -202,11 +205,12 @@ export const products = [
       Uso: 'Multiuso',
       'País de Origen': 'Chile',
       'Garantía Mínima Legal': '3 meses',
+      'Tamaño del Producto': '30 cm de largo'
     },
   },
   {
     id: 11,
-    nombre: 'Bolsas de Basura',
+    nombre: 'Bolsas de Basura 10 unidades',
     desc: 'Resistentes y prácticas.',
     img: '/img/Bolsas.jpg',
     precio: 1500,
@@ -226,7 +230,7 @@ export const products = [
   },
   {
     id: 12,
-    nombre: 'Limpiador Multiuso',
+    nombre: 'Limpiador Multiuso 900ml',
     desc: 'Eficaz en todas las superficies.',
     img: '/img/limpiador-multiuso.jpg',
     precio: 3200,
@@ -247,7 +251,7 @@ export const products = [
   },
   {
     id: 13,
-    nombre: 'Anti Sarro',
+    nombre: 'Anti Sarro 500ml',
     desc: 'Elimina sarro y manchas.',
     img: '/img/anti-sarro.jpg',
     precio: 5000,
@@ -267,7 +271,7 @@ export const products = [
   },
   {
     id: 14,
-    nombre: 'Detergente Líquido Premium',
+    nombre: 'Detergente Líquido Premium 1L',
     desc: 'Poder superior para ropa y superficies.',
     img: '/img/detergente-premium.jpg',
     precio: 6200,
@@ -289,7 +293,7 @@ export const products = [
   },
   {
     id: 15,
-    nombre: 'Desinfectante Floral',
+    nombre: 'Desinfectante Floral 1L',
     desc: 'Elimina bacterias y deja aroma agradable.',
     img: '/img/desinfectante-floral.jpg',
     precio: 2800,
@@ -311,7 +315,7 @@ export const products = [
   },
   {
     id: 16,
-    nombre: 'Guantes Antideslizantes',
+    nombre: 'Guantes Antideslizantes 1 par',
     desc: 'Comodidad y protección total.',
     img: '/img/guantes-antideslizantes.jpg',
     precio: 1800,
@@ -331,7 +335,7 @@ export const products = [
   },
   {
     id: 17,
-    nombre: 'Limpiavidrios Profesional',
+    nombre: 'Limpiavidrios Profesional 750ml',
     desc: 'Brillo superior sin dejar marcas.',
     img: '/img/limpiavidrios-pro.jpg',
     precio: 3300,
@@ -352,7 +356,7 @@ export const products = [
   },
   {
     id: 18,
-    nombre: 'Limpiapisos Lavanda',
+    nombre: 'Limpiapisos Lavanda 900ml',
     desc: 'Brillo y aroma fresco en cada limpieza.',
     img: '/img/limpiapisos-lavanda.jpg',
     precio: 3600,
@@ -373,7 +377,7 @@ export const products = [
   },
   {
     id: 19,
-    nombre: 'Limpiador Multiuso Cítrico',
+    nombre: 'Limpiador Multiuso Cítrico 1L',
     desc: 'Desengrasa y deja aroma cítrico.',
     img: '/img/limpiador-citrico.jpg',
     precio: 3100,
@@ -394,7 +398,7 @@ export const products = [
   },
   {
     id: 20,
-    nombre: 'Desincrustante Ultra Power',
+    nombre: 'Desincrustante Ultra Power 500ml',
     desc: 'Elimina sarro y residuos minerales.',
     img: '/img/desincrustante-ultra.jpg',
     precio: 5200,
