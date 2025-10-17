@@ -1,5 +1,17 @@
 // src/pages/Productos.jsx
 import React from "react";
+import det from "../assets/img/Detergente.jpg";
+import escoba from "../assets/img/escoba.jpg";
+import cloro from "../assets/img/Cloro.jpg";
+import guantes from "../assets/img/guantes.jpg";
+import esponja from "../assets/img/esponja.jpg";
+import limpiavidrios from "../assets/img/limpiavidrios.jpg";
+import trapo from "../assets/img/trapo.jpg";
+import escobillon from "../assets/img/escobillon.jpg";
+import limpiapisos from "../assets/img/limpiapisos.jpg";
+import cepillo from "../assets/img/cepillo.jpg";
+import bolsas from "../assets/img/bolsas.jpg";
+import limpiadorMultiuso from "../assets/img/limpiador-multiuso.jpg";
 
 const Productos = () => {
     return (
@@ -22,7 +34,7 @@ const Productos = () => {
                         <div className="col-md-4" data-category="limpiadores">
                             <a href="detalle-producto.html?id=1" className="link-producto">
                                 <div className="card h-100 shadow-sm position-relative">
-                                    <img src="img/Detergente.jpg" className="card-img-top" alt="Detergente" />
+                                    <img src={det} className="card-img-top" alt="Detergente" />
                                     <div className="card-body text-center">
                                         <h5 className="card-title">Detergente Líquido 900ml</h5>
                                         <p className="card-text">Ideal para ropa y superficies.</p>
@@ -38,7 +50,7 @@ const Productos = () => {
                             <a href="detalle-producto.html?id=2" className="link-producto">
                                 <div className="card h-100 shadow-sm position-relative">
                                     <span className="badge-sale">Descuento</span>
-                                    <img src="img/Cloro.jpg" className="card-img-top" alt="Cloro" />
+                                    <img src={cloro} className="card-img-top" alt="Cloro" />
                                     <div className="card-body text-center d-flex flex-column justify-content-between h-100">
                                         <div>
                                             <h5 className="card-title">Cloro Desinfectante 1L</h5>
@@ -58,7 +70,7 @@ const Productos = () => {
                         <div className="col-md-4">
                             <a href="detalle-producto.html?id=3" className="link-producto">
                                 <div className="card h-100 shadow-sm position-relative">
-                                    <img src="img/escoba.jpg" className="card-img-top" alt="Escoba" />
+                                    <img src={escoba} className="card-img-top" alt="Escoba" />
                                     <div className="card-body text-center">
                                         <h5 className="card-title">Escoba Multiuso 1 Unidad</h5>
                                         <p className="card-text">Perfecta para interiores y exteriores.</p>
@@ -74,7 +86,7 @@ const Productos = () => {
                             <a href="detalle-producto.html?id=4" className="link-producto">
                                 <div className="card h-100 shadow-sm position-relative">
                                     <span className="badge-sale">Descuento</span>
-                                    <img src="img/guantes.jpg" className="card-img-top" alt="Guantes" />
+                                    <img src={guantes} className="card-img-top" alt="Guantes" />
                                     <div className="card-body text-center d-flex flex-column justify-content-between h-100">
                                         <div>
                                             <h5 className="card-title">Par de Guantes de Limpieza</h5>
@@ -94,7 +106,7 @@ const Productos = () => {
                         <div className="col-md-4">
                             <a href="detalle-producto.html?id=5" className="link-producto">
                                 <div className="card h-100 shadow-sm position-relative">
-                                    <img src="img/esponja.jpg" className="card-img-top" alt="Esponja" />
+                                    <img src={esponja} className="card-img-top" alt="Esponja" />
                                     <div className="card-body text-center">
                                         <h5 className="card-title">Esponja Multiuso 1 Unidad</h5>
                                         <p className="card-text">Ideal para cocina y baño.</p>
@@ -110,7 +122,7 @@ const Productos = () => {
                             <a href="detalle-producto.html?id=6" className="link-producto">
                                 <div className="card h-100 shadow-sm position-relative">
                                     <span className="badge-sale">Descuento</span>
-                                    <img src="img/limpiavidrios.jpg" className="card-img-top" alt="Limpiavidrios" />
+                                    <img src={limpiavidrios} className="card-img-top" alt="Limpiavidrios" />
                                     <div className="card-body text-center d-flex flex-column justify-content-between h-100">
                                         <div>
                                             <h5 className="card-title">Limpiavidrios 500ml</h5>
@@ -130,7 +142,7 @@ const Productos = () => {
                         <div className="col-md-4">
                             <a href="detalle-producto.html?id=7" className="link-producto">
                                 <div className="card h-100 shadow-sm position-relative">
-                                    <img src="img/trapo.jpg" className="card-img-top" alt="Trapo" />
+                                    <img src={trapo} className="card-img-top" alt="Trapo" />
                                     <div className="card-body text-center">
                                         <h5 className="card-title">Trapo de Piso 1 Unidad</h5>
                                         <p className="card-text">Absorbente y resistente.</p>
@@ -145,7 +157,7 @@ const Productos = () => {
                         <div className="col-md-4">
                             <a href="detalle-producto.html?id=8" className="link-producto">
                                 <div className="card h-100 shadow-sm position-relative">
-                                    <img src="img/escobillon.jpg" className="card-img-top" alt="Escobillón" />
+                                    <img src={escobillon} className="card-img-top" alt="Escobillón" />
                                     <div className="card-body text-center">
                                         <h5 className="card-title">Escobillón 1 Unidad</h5>
                                         <p className="card-text">Cerdas resistentes para exteriores.</p>
@@ -161,7 +173,7 @@ const Productos = () => {
                             <a href="detalle-producto.html?id=9" className="link-producto">
                                 <div className="card h-100 shadow-sm position-relative">
                                     <span className="badge-sale">Descuento</span>
-                                    <img src="img/limpiapisos.jpg" className="card-img-top" alt="Limpiapisos" />
+                                    <img src={limpiapisos} className="card-img-top" alt="Limpiapisos" />
                                     <div className="card-body text-center d-flex flex-column justify-content-between h-100">
                                         <div>
                                             <h5 className="card-title">Limpiapisos 900ml</h5>
@@ -181,7 +193,7 @@ const Productos = () => {
                         <div className="col-md-4">
                             <a href="detalle-producto.html?id=10" className="link-producto">
                                 <div className="card h-100 shadow-sm position-relative">
-                                    <img src="img/cepillo.jpg" className="card-img-top" alt="Cepillo" />
+                                    <img src={cepillo} className="card-img-top" alt="Cepillo" />
                                     <div className="card-body text-center">
                                         <h5 className="card-title">Cepillo de Limpieza 1 Unidad</h5>
                                         <p className="card-text">Ideal para superficies difíciles.</p>
@@ -197,7 +209,7 @@ const Productos = () => {
                         <div className="col-md-4">
                             <a href="detalle-producto.html?id=11" className="link-producto">
                                 <div className="card h-100 shadow-sm position-relative">
-                                    <img src="img/bolsas.jpg" className="card-img-top" alt="Bolsas" />
+                                    <img src={bolsas} className="card-img-top" alt="Bolsas" />
                                     <div className="card-body text-center">
                                         <h5 className="card-title">Bolsas de Basura 10 Unidades</h5>
                                         <p className="card-text">Resistentes y prácticas.</p>
@@ -214,7 +226,7 @@ const Productos = () => {
                             <a href="detalle-producto.html?id=12" className="link-producto">
                                 <div className="card h-100 shadow-sm position-relative">
                                     <span className="badge-sale">Descuento</span>
-                                    <img src="img/limpiador-multiuso.jpg" className="card-img-top" alt="Limpiador Multiuso" />
+                                    <img src={limpiadorMultiuso} className="card-img-top" alt="Limpiador Multiuso" />
                                     <div className="card-body text-center d-flex flex-column justify-content-between h-100">
                                         <div>
                                             <h5 className="card-title">Limpiador Multiuso 900ml</h5>

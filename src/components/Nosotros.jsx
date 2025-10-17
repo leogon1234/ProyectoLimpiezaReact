@@ -1,3 +1,8 @@
+import React from 'react';
+import fresh from '../assets/img/freshcomunity.jpg';
+import nosotros from '../assets/img/sobrenosotros.jpg';
+import rostro from '../assets/img/rostro.jpg';
+
 function Nosotros() {
     return (
         <main className="container my-5">
@@ -12,7 +17,7 @@ function Nosotros() {
                         </p>
                     </div>
                     <div className="col-lg-5 text-center">
-                        <img src="img/sobrenosotros.jpg" alt="Ilustración Sobre Nosotros" className="img-fluid about-hero-img" />
+                        <img src={nosotros} alt="Ilustración Sobre Nosotros" className="img-fluid about-hero-img" />
                     </div>
                 </div>
             </section>
@@ -46,7 +51,7 @@ function Nosotros() {
                         </p>
                     </div>
                     <div className="col-md-6 text-center">
-                        <img src="img/freshcomunity.jpg" alt="imagen limpifresh" className="img-fluid rounded-4 sombra-suave" width="80%" />
+                        <img src={fresh} alt="imagen limpifresh" className="img-fluid rounded-4 sombra-suave" width="80%" />
                     </div>
                 </div>
             </section>
@@ -55,7 +60,7 @@ function Nosotros() {
                 <div className="row justify-content-center g-4">
                     <div className="col-md-4">
                         <div className="card h-100 shadow text-center border-0">
-                            <img src="img/rostro.jpg" alt="Benja" className="card-img-top rounded-circle mx-auto mt-4" width={120} height={120} style={{ objectFit: 'cover' }} />
+                            <img src={rostro} alt="Benja" className="card-img-top rounded-circle mx-auto mt-4" width={120} height={120} style={{ objectFit: 'cover' }} />
                             <div className="card-body">
                                 <h4 className="card-title mb-1">Benjamin Mella</h4>
                                 <p className="card-text text-muted">Desarrollador backend y frontend</p>
@@ -64,7 +69,7 @@ function Nosotros() {
                     </div>
                     <div className="col-md-4">
                         <div className="card h-100 shadow text-center border-0">
-                            <img src="img/rostro.jpg" alt="Leandro" className="card-img-top rounded-circle mx-auto mt-4" width={120} height={120} style={{ objectFit: 'cover' }} />
+                            <img src={rostro} alt="Leandro" className="card-img-top rounded-circle mx-auto mt-4" width={120} height={120} style={{ objectFit: 'cover' }} />
                             <div className="card-body">
                                 <h4 className="card-title mb-1">Leandro Gonzalez</h4>
                                 <p className="card-text text-muted">Desarrollador backend y frontend</p>
@@ -73,7 +78,7 @@ function Nosotros() {
                     </div>
                     <div className="col-md-4">
                         <div className="card h-100 shadow text-center border-0">
-                            <img src="img/rostro.jpg" alt="Alonso" className="card-img-top rounded-circle mx-auto mt-4" width={120} height={120} style={{ objectFit: 'cover' }} />
+                            <img src={rostro} alt="Alonso" className="card-img-top rounded-circle mx-auto mt-4" width={120} height={120} style={{ objectFit: 'cover' }} />
                             <div className="card-body">
                                 <h4 className="card-title mb-1">Alonso Carrasco</h4>
                                 <p className="card-text text-muted">Desarrollador backend y frontend</p>

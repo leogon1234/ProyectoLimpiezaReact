@@ -1,0 +1,152 @@
+ :root {
+  --lf-brand: #3f46ff;
+}
+
+.lf-navbar.bg-brand {
+  background-color: var(--lf-brand) !important;
+}
+
+.lf-navbar .navbar-brand,
+.lf-navbar .nav-link {
+  color: #fff !important;
+  font-weight: 600;
+  opacity: .95;
+}
+
+.lf-navbar .nav-link:hover,
+.lf-navbar .nav-link.active {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.lf-navbar .btn-light {
+  background: #fff !important;
+  border: 0;
+  color: #111 !important;
+}
+
+.lf-navbar .btn-light:hover {
+  background: #f3f4ff !important;
+}
+
+.lf-navbar .badge {
+  font-size: .65rem;
+  padding: .32rem .42rem;
+  line-height: 1;
+}
+
+
+ :root {
+  --lf-brand: #3f46ff;
+  /* azul principal */
+  --lf-brand-dark: #2e34d6;
+  /* hover */
+  --lf-brand-light: #eef0ff;
+  /* fondos suaves */
+}
+
+/* Título y subtítulo con color de marca */
+.lf-eyebrow {
+  color: var(--lf-brand) !important;
+  font-weight: 700 !important;
+  letter-spacing: .3px;
+}
+
+.lf-title {
+  letter-spacing: -.2px;
+}
+
+/* Botón Enviar en azul marca */
+.lf-btn {
+  background: var(--lf-brand) !important;
+  border: 1px solid var(--lf-brand) !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  border-radius: .7rem !important;
+  box-shadow: 0 4px 10px rgba(63, 70, 255, .25) !important;
+  transition: all .15s ease;
+}
+
+.lf-btn:hover {
+  background: var(--lf-brand-dark) !important;
+  border-color: var(--lf-brand-dark) !important;
+  box-shadow: 0 6px 16px rgba(63, 70, 255, .35) !important;
+  transform: translateY(-1px);
+}
+
+.lf-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 8px rgba(63, 70, 255, .25) !important;
+}
+
+/* Campos con borde y foco azul */
+.lf-input {
+  border: 1px solid #dfe3ef !important;
+  border-radius: .6rem !important;
+  background: #fff !important;
+  padding: .85rem .9rem !important;
+  transition: border .15s ease, box-shadow .15s ease;
+}
+
+.lf-input::placeholder {
+  color: #a3a8b8 !important;
+}
+
+.lf-input:focus {
+  border-color: var(--lf-brand) !important;
+  box-shadow: 0 0 0 .22rem rgba(63, 70, 255, .2) !important;
+  outline: 0 !important;
+}
+
+/* Estado válido / inválido con colores suaves */
+.was-validated .lf-input:valid,
+.lf-input.is-valid {
+  border-color: var(--lf-brand) !important;
+  box-shadow: 0 0 0 .18rem rgba(63, 70, 255, .18) !important;
+  background-color: var(--lf-brand-light) !important;
+}
+
+.was-validated .lf-input:invalid,
+.lf-input.is-invalid {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 .18rem rgba(220, 53, 69, .15) !important;
+}
+
+/* Alertas con estilo suave */
+#lfOk.alert {
+  background: rgba(63, 70, 255, .1) !important;
+  border-color: rgba(63, 70, 255, .3) !important;
+  color: #1b2c99 !important;
+}
+
+#lfErr.alert {
+  background: #fdebec !important;
+  border-color: #f5c2c7 !important;
+  color: #8a1c25 !important;
+}
+
+/* Tarjetas de contacto al pie */
+.lf-card {
+  border: 1px solid #e3e5ef;
+  border-radius: .8rem;
+  background: #fff;
+  gap: .7rem;
+  transition: all .2s ease;
+}
+
+.lf-card:hover {
+  border-color: var(--lf-brand);
+  box-shadow: 0 6px 18px rgba(63, 70, 255, .12);
+  transform: translateY(-3px);
+}
+
+.lf-icon {
+  background: var(--lf-brand-light);
+  color: var(--lf-brand);
+  border-radius: 50%;
+  font-size: 1.25rem;
+  width: 45px;
+  height: 45px;
+  display: grid;
+  place-items: center;
+}

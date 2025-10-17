@@ -1,4 +1,3 @@
-// src/pages/Home.jsx
 import React from "react";
 import img1 from "../assets/img/carrosel1.png";
 import img2 from "../assets/img/carrosel2.png";
