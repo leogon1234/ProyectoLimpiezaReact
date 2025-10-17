@@ -15,6 +15,7 @@ import Login from './pages/Login.jsx';
 import Registro from './pages/Registro.jsx';
 import Pago from './pages/Pago.jsx';
 import Admin from './pages/Admin.jsx';
+import Boleta from './pages/Boleta.jsx';
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
           <Route path="/pago" element={<Pago />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<Home />} />
+          <Route path="/boleta" element={<Boleta />} />
         </Routes>
       </main>
       <Footer />

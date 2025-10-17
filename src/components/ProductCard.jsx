@@ -31,7 +31,7 @@ export default function ProductCard({ product }) {
             src={img}
             alt={nombre}
             className="card-img-top"
-            style={{ objectFit: 'cover', height: '160px' }}
+            style={{ objectFit: 'contain', height: '160px' }}
           />
           <div className="card-body">
             <h5 className="card-title fw-bold">{nombre}</h5>
