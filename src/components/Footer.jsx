@@ -1,8 +1,11 @@
-// src/components/Footer.jsx
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
 
-const Footer = () => {
+/**
+ * Footer component replicates the structure of the original static site.
+ * It displays contact information and a brief description of the
+ * business. At small viewports the layout stacks vertically.
+ */
+export default function Footer() {
   return (
     <footer className="bg-light text-center text-lg-start mt-5 border-top">
       <div className="container p-4">
@@ -11,23 +14,29 @@ const Footer = () => {
             <h4 className="mb-3 color-principal">Contacto</h4>
             <ul className="list-unstyled">
               <li>
-                <a href="#" className="text-decoration-none text-dark">
-                  <i className="bi bi-geo-alt me-2"></i>Duoc Antonio Varas
+                <a href="#" className="text-decoration-none text-dark d-flex align-items-center">
+                  <i className="bi bi-geo-alt-fill me-2"></i>
+                  Duoc Antonio Varas
                 </a>
               </li>
               <li className="mt-2">
-                <a href="tel:+56912345678" className="text-decoration-none text-dark">
-                  <i className="bi bi-telephone me-2"></i>+56 9 1234 5678
+                <a href="tel:+56912345678" className="text-decoration-none text-dark d-flex align-items-center">
+                  <i className="bi bi-telephone-fill me-2"></i>
+                  +56&nbsp;9&nbsp;1234&nbsp;5678
                 </a>
               </li>
             </ul>
           </div>
           <div className="col-md-4">
-            <Link to="/" className="logo-footer d-block mb-2 fw-bold fs-4 color-principal text-decoration-none">
+            <a
+              href="/"
+              className="logo-footer d-block mb-2 fw-bold fs-4 color-principal text-decoration-none"
+            >
               LimpiFresh
-            </Link>
+            </a>
             <p className="text-muted mb-0">
-              Productos de limpieza de alta calidad para tu hogar y negocio.<br />
+              Productos de limpieza de alta calidad para tu hogar y negocio.
+              <br />
               Soluciones ecológicas para mantener tus espacios impecables.
             </p>
           </div>
@@ -35,6 +44,4 @@ const Footer = () => {
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}
