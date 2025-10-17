@@ -688,3 +688,44 @@ header.lf-navbar {
   border-color: #2e34d6 !important;
   transform: scale(1.05);
 }
+
+.mv-auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px); /* resta la altura del header */
+  padding-top: 80px; /* empuja el contenido justo debajo del header */
+  background: #f8f9fa;
+  flex-direction: column;
+}
+
+/* Tarjeta centrada y visualmente proporcionada */
+.mv-card {
+  width: 380px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Ajuste del botón de mostrar contraseña */
+.password-container {
+  position: relative;
+}
+
+.password-container input {
+  padding-right: 45px;
+}
+
+.password-container button {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+

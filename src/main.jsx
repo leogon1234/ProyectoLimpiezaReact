@@ -4,7 +4,9 @@ import App from "./App.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js"; 
-import "./assets/css/style.css"; 
+import './assets/css/styleAdmin.css';
+import './assets/css/contacto-limpifresh.css';
+import './assets/css/style.css';
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
