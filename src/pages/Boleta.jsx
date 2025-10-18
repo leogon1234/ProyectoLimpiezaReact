@@ -174,26 +174,6 @@ export default function Boleta() {
           </div>
         </div>
       </div>
-
-      <style>{`
-        @media print {
-          body * {
-            visibility: hidden;
-          }
-          #invoice, #invoice * {
-            visibility: visible;
-          }
-          #invoice {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-          }
-          .d-print-none {
-            display: none !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }
