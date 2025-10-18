@@ -41,7 +41,7 @@ function cartReducer(state, action) {
   }
 }
 
-const CartContext = createContext(null);
+export const CartContext = createContext(null);
 
 export function CartProvider({ children }) {
   const [cart, dispatch] = useReducer(cartReducer, [], initCart);

@@ -5,7 +5,7 @@ const LS_USERS = 'limpifresh-users';
 const LS_CURRENT_USER = 'limpifresh-current-user';
 
 // Create context for authentication.
-const UserContext = createContext(null);
+export const UserContext = createContext(null);
 
 /**
  * UserProvider stores authenticated user information and exposes
