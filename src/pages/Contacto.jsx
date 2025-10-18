@@ -12,18 +12,43 @@ const ASUNTOS = [
 
 export default function Contacto() {
   const [form, setForm] = useState({ nombre: '', email: '', asunto: '', mensaje: '' });
+  const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
+    setErrors({ ...errors, [name]: '' });
+  };
+
+  const validarContacto = () => {
+    const newErrors = {};
+    if (!form.nombre.trim()) newErrors.nombre = 'El nombre es obligatorio.';
+    else if (!nameRegex.test(form.nombre)) newErrors.nombre = 'El nombre solo debe contener letras.';
+    if (!form.email.trim()) newErrors.email = 'El correo es obligatorio.';
+    else if (!emailRegex.test(form.email)) newErrors.email = 'El correo no tiene un formato válido.';
+    if (!form.asunto.trim()) newErrors.asunto = 'Debes seleccionar un asunto.';
+    if (!form.mensaje.trim()) newErrors.mensaje = 'El mensaje no puede estar vacío.';
+    return newErrors;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const validarErrores = validarContacto();
+
+    if (Object.keys(validarErrores).length > 0) {
+      setErrors(validarErrores);
+      setSubmitted(false);
+      return;
+    }
+
     console.log('Mensaje enviado', form);
     setSubmitted(true);
     setForm({ nombre: '', email: '', asunto: '', mensaje: '' });
+    setErrors({});
   };
 
   return (
@@ -47,34 +72,33 @@ export default function Contacto() {
                 <input
                   id="nombre"
                   type="text"
-                  className="form-control lf-input"
+                  className={`form-control lf-input ${errors.nombre ? 'is-invalid' : ''}`}
                   placeholder="Nombre"
                   name="nombre"
                   value={form.nombre}
                   onChange={handleChange}
-                  required
                 />
+                {errors.nombre && <div className="invalid-feedback">{errors.nombre}</div>}
               </div>
               <div className="col-md-6">
                 <input
                   id="email"
                   type="email"
-                  className="form-control lf-input"
+                  className={`form-control lf-input ${errors.email ? 'is-invalid' : ''}`}
                   placeholder="Correo"
                   name="email"
                   value={form.email}
                   onChange={handleChange}
-                  required
                 />
+                {errors.email && <div className="invalid-feedback">{errors.email}</div>}
               </div>
               <div className="col-12">
                 <select
                   id="asunto"
-                  className="form-select lf-input"
+                  className={`form-select lf-input ${errors.asunto ? 'is-invalid' : ''}`}
                   name="asunto"
                   value={form.asunto}
                   onChange={handleChange}
-                  required
                 >
                   {ASUNTOS.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -82,18 +106,19 @@ export default function Contacto() {
                     </option>
                   ))}
                 </select>
+                {errors.asunto && <div className="invalid-feedback">{errors.asunto}</div>}
               </div>
               <div className="col-12">
                 <textarea
                   id="mensaje"
-                  className="form-control lf-input"
+                  className={`form-control lf-input ${errors.mensaje ? 'is-invalid' : ''}`}
                   rows="5"
                   placeholder="Mensaje"
                   name="mensaje"
                   value={form.mensaje}
                   onChange={handleChange}
-                  required
                 ></textarea>
+                {errors.mensaje && <div className="invalid-feedback">{errors.mensaje}</div>}
               </div>
               <div className="col-12">
                 <button type="submit" className="btn lf-btn w-100 py-3">

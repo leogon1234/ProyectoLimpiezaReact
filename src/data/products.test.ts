@@ -14,4 +14,9 @@ describe('Obtener producto por id', () => {
     const p = getProductById(999999)
     expect(p).toBeUndefined()
   })
+
+  it('verificar que los productos son verdaderos y falso si no existe', () => {
+    expect(getProductById(products[1].id)).toBeTruthy()
+    expect(getProductById(123456)).toBeFalsy()
+  })
 })

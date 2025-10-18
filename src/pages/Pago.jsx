@@ -243,7 +243,7 @@ export default function Pago() {
                     className="btn btn-primary btn-lg"
                     onClick={() => navigate('/boleta')}
                   >
-                    📄 Descargar tu boleta aquí
+                    Descargar tu boleta aquí
                   </button>
                 </div>
 

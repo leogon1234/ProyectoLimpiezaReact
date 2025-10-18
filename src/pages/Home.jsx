@@ -63,14 +63,20 @@ export default function Home() {
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
-      <section className="my-5 bg-light p-5 rounded text-center">
+      <section className="my-5 compromiso-eco text-center p-5">
         <h3 className="fw-bold color-principal mb-3">Nuestro Compromiso</h3>
         <p className="text-muted mb-4">
           En <strong>Limpifresh</strong> creemos que la limpieza y el cuidado del planeta pueden ir de la mano.
-          Por eso trabajamos con productos biodegradables, envases reciclables y procesos sostenibles.
+          Por eso trabajamos con <strong>productos biodegradables</strong>, <strong>envases reciclables</strong>
+          y <strong>procesos sostenibles</strong> que protegen tu hogar y nuestro entorno.
         </p>
-        <img src="/img/ecologico.jpg" alt="Compromiso ecológico" className="img-fluid rounded shadow-sm" style={{ maxWidth: '1000px' }} />
+        <img
+          src="/img/ecologico.jpg"
+          alt="Compromiso ecológico"
+          className="img-fluid rounded sombra-eco"
+        />
       </section>
+
     </div>
 
   );
