@@ -38,9 +38,6 @@ export default function Boleta() {
             <button className="btn btn-secondary" onClick={() => navigate('/')}>
               Volver al inicio
             </button>
-            <button className="btn btn-success" onClick={handlePrint}>
-              Descargar / Imprimir Boleta
-            </button>
           </div>
 
           <div className="card shadow-lg border-0" id="invoice">
@@ -58,7 +55,7 @@ export default function Boleta() {
                   </div>
                   <h5 className="text-muted mb-2">LimpiFresh</h5>
                   <p className="text-muted mb-0">Productos de Limpieza</p>
-                  <p className="text-muted mb-0">Antonio Varas #666</p>
+                  <p className="text-muted mb-0">Antonio Varas</p>
                   <p className="text-muted mb-0">Santiago, Chile</p>
                   <p className="text-primary mb-0">Chile</p>
                 </div>
@@ -111,7 +108,7 @@ export default function Boleta() {
                   <thead className="bg-dark text-white">
                     <tr>
                       <th className="py-3">Descripción del Artículo</th>
-                      <th className="py-3 text-center">Cant</th>
+                      <th className="py-3 text-center">Cantidad</th>
                       <th className="py-3 text-end">Precio</th>
                       <th className="py-3 text-end">Monto</th>
                     </tr>
@@ -160,21 +157,11 @@ export default function Boleta() {
                   </div>
                 </div>
               </div>
-
-              <div className="row mt-5">
-                <div className="col-12 text-center">
-                  <hr className="my-4" />
-                  <p className="text-muted small mb-0">Gracias por su compra</p>
-                  <p className="text-muted small">
-                    Si tiene alguna pregunta sobre esta boleta, contáctenos
-                  </p>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+        );
 }
 

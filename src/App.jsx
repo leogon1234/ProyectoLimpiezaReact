@@ -21,7 +21,6 @@ export default function App() {
   return (
     <div className="d-flex flex-column min-vh-100">
       <Header />
-      <main className="flex-grow-1">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/productos" element={<Products />} />
@@ -36,10 +35,8 @@ export default function App() {
           <Route path="/registro" element={<Registro />} />
           <Route path="/pago" element={<Pago />} />
           <Route path="/admin" element={<Admin />} />
-          <Route path="*" element={<Home />} />
           <Route path="/boleta" element={<Boleta />} />
         </Routes>
-      </main>
       <Footer />
     </div>
   );

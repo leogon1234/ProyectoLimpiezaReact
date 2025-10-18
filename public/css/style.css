@@ -433,3 +433,20 @@ body.mv-auth-page{
 }
 
 
+
+.compromiso-eco h3 {
+  color: #2e7d32; /* Verde ecológico */
+}
+
+.sombra-eco {
+  border-radius: 14px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sombra-eco:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 30px rgba(46, 125, 50, 0.3);
+}
+
+
+
