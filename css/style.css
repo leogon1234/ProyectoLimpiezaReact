@@ -1,0 +1,452 @@
+/* =========================================================
+   VARIABLES DE MARCA (LIMPI FRESH)
+   ========================================================= */
+:root {
+  /* Marca */
+  --lf-brand: #3f46ff;
+  --lf-brand-dark: #2e34d6;
+  --lf-brand-light: #eef0ff;
+
+  /* Paleta base del sitio */
+  --lf-bg: #f9f9f9;
+  --lf-surface: #ffffff;
+  --lf-border: #dcdcdc;
+  --lf-text: #333;
+  --lf-muted: #666;
+
+  /* Mapear primary a la marca */
+  --lf-primary: var(--lf-brand);
+  --lf-primary-dark: var(--lf-brand-dark);
+
+  /* Alturas */
+  --auth-header-h: 110px; /* login/registro */
+  --lf-nav-h: 84px;       /* navbar del sitio */
+}
+
+/* =========================================================
+   BASE / RESET
+   ========================================================= */
+body { margin: 0; padding: 0; background: #fafafa; }
+.color-principal { color: var(--lf-brand) !important; }
+
+/* Enlaces productos sin subrayado */
+.link-producto { text-decoration: none; color: inherit; }
+.link-producto:hover,
+.link-producto:focus { text-decoration: none; color: inherit; }
+
+/* =========================================================
+   NAVBAR / HEADER GENERAL (sitio)
+   ========================================================= */
+.header-tienda,
+.bg-brand { background: var(--lf-brand) !important; color: #fff; }
+
+.lf-navbar.navbar { min-height: var(--lf-nav-h); }
+.lf-navbar .container-fluid { max-width: 1200px; margin: 0 auto; }
+.lf-navbar .logo-img { width: 64px !important; height: 64px !important; object-fit: contain; }
+
+.lf-navbar .navbar-brand,
+.lf-navbar .nav-link { color: #fff; }
+.lf-navbar .nav-link { font-weight: 600; opacity: 0.9; }
+.lf-navbar .nav-link:hover,
+.lf-navbar .nav-link.active { opacity: 1; text-decoration: underline; }
+
+.lf-navbar .btn-light { background: #fff; color: #000; font-weight: 500; border: none; }
+.lf-navbar .btn-light:hover { background: #f3f4ff; }
+.lf-navbar .badge { font-size: .65rem; padding: .3rem .4rem; }
+
+.nav .nav-link { color: white !important; }
+header.lf-navbar { margin-top: 0; }
+
+/* NO dejes padding-top global en todas las páginas.
+   El navbar es sticky. Evita “saltitos” de scroll. */
+body:not(.mv-auth-page) { padding-top: 0 !important; }
+html { overflow-y: scroll; }
+
+/* Oculta header general en páginas de auth */
+.mv-auth-page .lf-navbar,
+.mv-auth-page .header-tienda { display: none !important; }
+
+/* =========================================================
+   UTILIDADES / TIPOGRAFÍA
+   ========================================================= */
+.lf-eyebrow { color: var(--lf-brand); font-weight: 600; letter-spacing: .3px; }
+.lf-title { font-size: clamp(1.8rem, 1rem + 2vw, 2.6rem); font-weight: 800; line-height: 1.2; }
+.span { font-size: .9rem; }
+
+/* =========================================================
+   COMPONENTES GENERALES
+   ========================================================= */
+.lf-card { border: 1px solid #e3e5ef; border-radius: .8rem; background: #fff; gap: .7rem; }
+.card .btn { width: auto !important; display: inline-block; margin-left: auto; margin-right: auto; }
+.card-img-top { height: 160px; width: 100%; object-fit: contain; background: #fff; padding: 10px; display: block; }
+
+.lf-icon {
+  background: var(--lf-brand-light);
+  color: var(--lf-brand);
+  border-radius: 50%;
+  font-size: 1.25rem;
+  width: 45px; height: 45px;
+  display: grid; place-items: center;
+}
+
+/* Botón pagar (coherente a marca) */
+.btn-pagar {
+  background-color: var(--lf-brand);
+  color: #fff; font-weight: 600;
+  padding: 10px 25px; border: none; border-radius: 8px;
+  transition: background-color .3s ease, transform .12s ease;
+  margin-top: 10px;
+}
+.btn-pagar:hover { background-color: var(--lf-brand-dark); color: #fff; transform: translateY(-1px); }
+
+/* =========================================================
+   PRODUCTOS / PRECIO / CARRITO
+   ========================================================= */
+.input-cantidad { width: 100px; display: inline-block; }
+
+.header-titulo { font-size: 1.5rem; }
+.carrito-contador-badge { font-size: .9rem; }
+.carrito-iva-text { color: #555; font-size: .95rem; }
+
+.carrito-iva-col { display: flex; flex-direction: column; align-items: flex-end; gap: .1em; }
+.carrito-iva-item { color: #888; font-size: 1.05em; }
+
+.precio { display: block; margin: 50px 0 .5rem; color: #000; font-size: 20px; font-weight: bold; }
+.precio-oferta { color: var(--lf-brand-dark); font-weight: bold; font-size: 2rem; margin-bottom: .2rem; display: flex; flex-direction: column; align-items: center; gap: 0; }
+.precio-tachado { text-decoration: line-through; color: #ff0000; font-size: 1.3rem; margin: 0 0 .5rem 0; }
+
+.badge-sale {
+  position: absolute; top: 10px; right: 10px;
+  background: #434649; color: #fff; padding: .3rem .6rem;
+  border-radius: .25rem; font-size: .8rem;
+}
+
+/* Detalle de producto */
+.detalle-container { margin-top: 2rem; }
+.detalle-img {
+  width: 100%; max-width: 400px; height: 400px; object-fit: contain;
+  background: #f8f9fa; border-radius: .5rem; padding: 1rem;
+}
+.detalle-precio,
+.detalle-precio-oferta { font-size: 2.2rem; font-weight: bold; color: var(--lf-brand-dark); }
+.detalle-precio-tachado { text-decoration: line-through; color: #6c757d; font-size: 1.4rem; margin-right: 10px; }
+.detalle-id { font-size: .9rem; color: #888; margin-bottom: .5rem; }
+
+.titulo-limpifresh { text-decoration: none; color: #fff; }
+.logo-limpifresh { max-width: 150px; width: 50%; height: 100%; display: block; margin: 100px auto; }
+
+/* =========================================================
+   LOGIN / REGISTRO (AUTH)
+   ========================================================= */
+.mv-auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--lf-bg); padding: 24px; }
+
+/* Header compacto con logo grande centrado */
+.lf-auth-header {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--auth-header-h);
+  background: var(--lf-brand);
+  color: #fff; z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+}
+.lf-auth-brand { display: inline-flex; align-items: center; gap: 14px; color: #fff; text-decoration: none; }
+.lf-logo-auth {
+  width: 130px; height: 130px;           /* logo grande */
+  object-fit: contain; border-radius: 14px;
+  filter: drop-shadow(0 2px 5px rgba(0,0,0,.25));
+  transition: transform .25s ease, filter .25s ease;
+}
+.lf-logo-auth:hover { transform: scale(1.08); filter: drop-shadow(0 4px 8px rgba(0,0,0,.3)); }
+.lf-auth-title { font-weight: 700; font-size: 1.4rem; letter-spacing: .3px; margin-top: 4px; text-shadow: 0 1px 3px rgba(0,0,0,.2); }
+
+/* Compensación por header fijo (más alto por el logo) */
+body.mv-auth-page { padding-top: calc(var(--auth-header-h) + 40px) !important; }
+
+/* Tarjeta de auth */
+.mv-card {
+  width: 100%; max-width: 520px;
+  background: var(--lf-surface);
+  border: 1px solid var(--lf-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.05);
+  color: var(--lf-text);
+  padding: 32px 26px; margin: 0 auto;
+}
+.mv-card .card-body, .mv-card form { width: 100%; margin: 0 auto; }
+.mv-card h2 { text-align: center; font-weight: 700; color: var(--lf-primary); margin-bottom: 20px; }
+
+/* Tabs auth */
+.mv-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+.mv-tab {
+  border: 1px solid var(--lf-border);
+  border-radius: 8px; padding: 6px 14px;
+  text-decoration: none; color: var(--lf-brand);
+  font-weight: 600; background: #fff; transition: all .2s ease;
+}
+.mv-tab:hover { background: var(--lf-brand-light); }
+.mv-tab.mv-active { background: var(--lf-brand); color: #fff; border-color: var(--lf-brand); }
+
+/* Inputs y foco */
+.mv-input.form-control, .mv-input.form-select {
+  background: #fff; border: 1px solid var(--lf-border);
+  border-radius: 8px; color: var(--lf-text);
+  height: 46px; transition: border-color .2s ease;
+}
+.mv-input::placeholder { color: #999; }
+.mv-input:focus { border-color: var(--lf-brand); box-shadow: 0 0 0 .15rem rgba(63,70,255,.20); }
+
+/* Botón principal */
+.mv-btn {
+  background: var(--lf-brand);
+  border: none; color: #fff; font-weight: 700;
+  height: 46px; border-radius: 8px; width: 100%;
+  transition: transform .12s ease, background .2s ease;
+}
+.mv-btn:hover { background: var(--lf-brand-dark); transform: translateY(-1px); }
+
+/* Enlaces y hints */
+.mv-link { color: var(--lf-brand); text-decoration: none; font-weight: 600; }
+.mv-link:hover { text-decoration: underline; }
+.mv-hint { color: var(--lf-muted); font-size: .9rem; text-align: center; }
+
+/* Mostrar/Ocultar contraseña */
+.password-container { position: relative; }
+.label-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+.eye-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  border: none; background: transparent; cursor: pointer; border-radius: 6px;
+  font-size: .9rem; color: var(--lf-brand); padding: 2px 4px;
+  transition: background .15s ease, color .15s ease;
+}
+.eye-btn:hover { background: var(--lf-brand-light); color: var(--lf-brand-dark); }
+.eye-btn img { width: 20px; height: 20px; opacity: .85; transition: opacity .2s ease; }
+.eye-btn:hover img { opacity: 1; }
+
+@media (max-width: 576px) {
+  .mv-card { max-width: 90%; padding: 24px 20px; }
+}
+
+/* =========================================================
+   CARRUSEL
+   ========================================================= */
+.carousel-marcas .carousel-inner { background: #ffffff; border-radius: 12px; }
+.carousel-marcas .slide-frame { height: 380px; background: #fff; display: flex; align-items: center; justify-content: center; padding: 16px; }
+.carousel-marcas .slide-img { max-height: 100%; max-width: 100%; object-fit: contain; image-rendering: auto; }
+.carousel-marcas .carousel-caption { background: rgba(0,0,0,.45); border-radius: 10px; padding: 10px 14px; }
+.carousel-marcas .carousel-control-prev-icon,
+.carousel-marcas .carousel-control-next-icon { filter: invert(1); }
+
+@media (max-width: 576px) {
+  .carousel-marcas .slide-frame { height: 280px; padding: 10px; }
+  .carousel-marcas .carousel-caption { font-size: .9rem; padding: 8px 10px; }
+}
+
+/* =========================================================
+   PESTAÑAS EN DETALLE DE PRODUCTO
+   ========================================================= */
+#tabs-detalle .nav-link {
+  color: #000 !important; background-color: #f8f9fa;
+  border: 1px solid #dee2e6; margin-bottom: -1px;
+}
+#tabs-detalle .nav-link:hover,
+#tabs-detalle .nav-link:focus { color: #000 !important; background-color: #fff; }
+#tabs-detalle .nav-link.active { color: #000 !important; background-color: #fff; border-color: #dee2e6 #dee2e6 #fff; }
+
+/* =========================================================
+   SECCIÓN NOSOTROS / ABOUT
+   ========================================================= */
+.about-hero { background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%); border: 1px solid #e9ecef; }
+.about-hero-img { max-height: 260px; object-fit: contain; }
+@media (max-width: 576px) { .about-hero-img { max-height: 200px; } }
+
+.service-card { background-color: #ffffff; border: 1px solid #e9ecef; transition: transform .2s ease, box-shadow .2s ease; }
+.service-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0,0,0,.08); }
+
+/* Iconos de servicios (Nosotros) */
+.service-icon i {
+  font-size: 2rem;
+  color: var(--lf-brand-dark);
+  transition: transform .2s ease, color .3s ease;
+}
+.service-icon i:hover { transform: scale(1.2); color: var(--lf-brand); }
+
+.sombra-suave { box-shadow: 0 8px 24px rgba(0,0,0,.10); border: 1px solid #e9ecef; }
+
+/* =========================================================
+   BOTONES – MARCA (sólidos y outline success)
+   ========================================================= */
+.btn-success,
+.btn-success:focus {
+  background-color: var(--lf-brand) !important;
+  border-color: var(--lf-brand) !important;
+  color: #fff !important;
+}
+.btn-success:hover {
+  background-color: var(--lf-brand-dark) !important;
+  border-color: var(--lf-brand-dark) !important;
+}
+
+/* “Más aquí” y otros outline-success a color secundario de marca */
+.btn-outline-success {
+  color: var(--lf-brand-dark) !important;
+  border-color: var(--lf-brand-dark) !important;
+  background-color: transparent !important;
+  font-weight: 600; border-radius: 8px; transition: all .25s ease;
+}
+.btn-outline-success:hover {
+  background-color: var(--lf-brand-dark) !important;
+  color: #fff !important; border-color: var(--lf-brand-dark) !important;
+  transform: translateY(-1px);
+}
+
+/* Forzar íconos “text-success” a tu marca */
+.text-success { color: var(--lf-brand-dark) !important; }
+
+/* ====== AUTH: barra igual al index y marca centrada ====== */
+/* Usa la misma altura de la navbar del sitio */
+:root { --lf-nav-h: 84px; }           /* ya lo tienes arriba, lo reafirmo */
+:root { --auth-header-h: var(--lf-nav-h); }  /* login/registro = index */
+
+.mv-auth-page .lf-navbar,
+.mv-auth-page .header-tienda { display: none !important; } /* ocultar navbar global */
+
+.lf-auth-header{
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--auth-header-h);
+  background: var(--lf-brand);
+  color: #fff;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* CENTRADO */
+  box-shadow: 0 2px 6px rgba(0,0,0,.12);
+}
+
+.lf-auth-brand{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: .2px;
+}
+
+/* Tamaño del logo igual al index */
+.lf-auth-logo{
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+}
+
+/* Tipografía del nombre igual al index (fw-bold) */
+.lf-auth-title{
+  font-size: 1.5rem;   /* similar a .navbar-brand */
+  line-height: 1;
+}
+
+/* Compensar el header fijo */
+body.mv-auth-page{
+  padding-top: calc(var(--auth-header-h) + 24px) !important;
+}
+
+/* Responsive pequeño (opcional) */
+@media (max-width: 576px){
+  .lf-auth-logo{ width: 56px; height: 56px; }
+  .lf-auth-title{ font-size: 1.25rem; }
+}
+
+
+/* DETALLE producto */
+.dp-img-wrap{
+  width:100%;
+  max-width:400px;
+  aspect-ratio:4/5;
+  background:#fff;
+  border:1px solid #e9ecef;
+  border-radius:12px;
+  padding:16px;
+  display:grid;
+  place-items:center;
+}
+.dp-img{
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+}
+
+/* Precio destacado */
+.dp-price-main{
+  color:var(--lf-brand, #3f46ff);
+  font-weight:800;
+  font-size:2rem;
+}
+
+/* Tabs debajo del producto */
+.dp-tabs .nav-link{
+  color:#495057 !important;
+  background:#f8f9fa;
+  border:1px solid #dee2e6;
+  border-bottom-color:transparent;
+  margin-right:.25rem;
+  font-weight:600;
+  border-top-left-radius:.5rem;
+  border-top-right-radius:.5rem;
+}
+.dp-tabs .nav-link.active{
+  color:#000 !important;
+  background:#fff;
+  border-color:#dee2e6 #dee2e6 transparent;
+}
+.dp-tab-card{
+  border:1px solid #dee2e6;
+  border-top-left-radius:0;
+  border-top-right-radius:0;
+}
+
+.dp-tab-card table th{
+  width:260px;
+  color:#6c757d;
+  font-weight:500;
+}
+.dp-tab-card table td{
+  color:#212529;
+}
+
+.admin-thumb {
+  width: 56px;
+  height: 56px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.admin-thumb img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+
+
+.compromiso-eco h3 {
+  color: #2e7d32; /* Verde ecológico */
+}
+
+.sombra-eco {
+  border-radius: 14px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sombra-eco:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 30px rgba(46, 125, 50, 0.3);
+}
+
+
+
