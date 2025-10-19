@@ -48,7 +48,7 @@ export default function Pago() {
 
     if (name === 'cvv') {
       const onlyNumbers = value.replace(/\D/g, '');
-      if (onlyNumbers.length <= 4) { //limite de 4 dígitos
+      if (onlyNumbers.length <= 3) { //limite de 3 dígitos
         newValue = onlyNumbers;
       } else {
         return;
@@ -134,8 +134,8 @@ export default function Pago() {
         if (!value || value.trim() === '') {
           return 'El CVV es requerido.';
         }
-        if (value.length < 3 || value.length > 4) {
-          return 'El CVV debe tener 3 o 4 dígitos.';
+        if (value.length != 3 ) {
+          return 'El CVV debe tener 3.';
         }
         break;
       
@@ -319,7 +319,7 @@ export default function Pago() {
                 id="nombre"
                 name="nombre"
                 className={`form-control ${errors.nombre ? 'is-invalid' : ''}`}
-                placeholder="Ej: Juan Pérez"
+                placeholder="Ej: Juan Vera"
                 value={form.nombre}
                 onChange={handleChange}
                 required
@@ -339,7 +339,7 @@ export default function Pago() {
                 id="direccion"
                 name="direccion"
                 className={`form-control ${errors.direccion ? 'is-invalid' : ''}`}
-                placeholder="Ej: Calle 123 #45-67"
+                placeholder="Ej: calle Antonio, Varas Nº 666"
                 value={form.direccion}
                 onChange={handleChange}
                 required
@@ -359,7 +359,7 @@ export default function Pago() {
                 id="ciudad"
                 name="ciudad"
                 className={`form-control ${errors.ciudad ? 'is-invalid' : ''}`}
-                placeholder="Ej: Bogotá"
+                placeholder="Ej: Santiago "
                 value={form.ciudad}
                 onChange={handleChange}
                 required
@@ -379,7 +379,7 @@ export default function Pago() {
                 id="telefono"
                 name="telefono"
                 className="form-control"
-                placeholder="Ej: 3001234567"
+                placeholder="Ej: (+56) 9 12345678"
                 value={form.telefono}
                 onChange={handleChange}
               />
@@ -429,7 +429,7 @@ export default function Pago() {
               </div>
               <div className="col">
                 <label htmlFor="cvv" className="form-label">
-                  CVV (3 o 4 dígitos)
+                  CVV 
                 </label>
                 <input
                   type="text"

@@ -3,7 +3,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useUser } from '../contexts/UserContext.jsx';
 
 export default function Login() {
-  // Add/remove class on body so the global navbar is hidden on auth pages.
   useEffect(() => {
     document.body.classList.add('mv-auth-page');
     return () => {
