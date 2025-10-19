@@ -2,21 +2,22 @@ import { expect, afterEach, beforeEach } from 'vitest';
 import { cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
+// Mock de localStorage
+const storageMock = {};
+
 const localStorageMock = {
   getItem: (key) => {
-    return localStorageMock[key] || null;
+    return storageMock[key] || null;
   },
   setItem: (key, value) => {
-    localStorageMock[key] = value.toString();
+    storageMock[key] = value.toString();
   },
   removeItem: (key) => {
-    delete localStorageMock[key];
+    delete storageMock[key];
   },
   clear: () => {
-    Object.keys(localStorageMock).forEach(key => {
-      if (key !== 'getItem' && key !== 'setItem' && key !== 'removeItem' && key !== 'clear') {
-        delete localStorageMock[key];
-      }
+    Object.keys(storageMock).forEach(key => {
+      delete storageMock[key];
     });
   }
 };
