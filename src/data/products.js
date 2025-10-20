@@ -428,10 +428,7 @@ export function getProductById(id) {
   return products.find((p) => p.id === Number(id));
 }
 
-/**
- * Get a unique list of categories from the product catalog. Categories are
- * derived from the categoria property of each product.
- */
+
 export function getCategories() {
   const set = new Set(products.map((p) => p.categoria));
   return Array.from(set);

@@ -38,6 +38,13 @@ export default function Login() {
 
   return (
     <>
+ 
+      <style>{`
+        body.mv-auth-page header:not(.lf-auth-header) { 
+          display: none !important; 
+        }
+      `}</style>
+
       {/* Compact header with large logo centered */}
       <header className="lf-auth-header">
         <Link to="/" className="lf-auth-brand">
@@ -45,6 +52,7 @@ export default function Login() {
           <span className="lf-auth-title">LimpiFresh</span>
         </Link>
       </header>
+
       {/* Card container for the auth form */}
       <div className="mv-card mt-4">
         <h2>Bienvenido a LimpiFresh</h2>

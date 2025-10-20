@@ -12,7 +12,14 @@ export default function Registro() {
 
   const { register } = useUser();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: '', email: '', password: '', rut: '', region: '', comuna: '' });
+  const [form, setForm] = useState({
+    name: '',
+    email: '',
+    password: '',
+    rut: '',
+    region: '',
+    comuna: '',
+  });
   const [error, setError] = useState(null);
 
   const handleChange = (e) => {
@@ -33,12 +40,20 @@ export default function Registro() {
 
   return (
     <>
+    
+      <style>{`
+        body.mv-auth-page header:not(.lf-auth-header) { 
+          display: none !important; 
+        }
+      `}</style>
+
       <header className="lf-auth-header">
         <Link to="/" className="lf-auth-brand">
           <img src="/img/logo.jpg" alt="Logo LimpiFresh" className="lf-auth-logo" />
           <span className="lf-auth-title">LimpiFresh</span>
         </Link>
       </header>
+
       <div className="mv-card mt-4">
         <h2>Crea tu cuenta</h2>
         <div className="mv-tabs">
@@ -143,7 +158,9 @@ export default function Registro() {
         </form>
         <p className="mv-hint mt-2">
           ¿Ya tienes cuenta?{' '}
-          <Link to="/login" className="mv-link">Inicia sesión</Link>
+          <Link to="/login" className="mv-link">
+            Inicia sesión
+          </Link>
         </p>
       </div>
     </>
