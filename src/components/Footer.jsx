@@ -1,10 +1,6 @@
 import React from 'react';
 
-/**
- * Footer component replicates the structure of the original static site.
- * It displays contact information and a brief description of the
- * business. At small viewports the layout stacks vertically.
- */
+
 export default function Footer() {
   return (
     <footer className="bg-light text-center text-lg-start mt-5 border-top">

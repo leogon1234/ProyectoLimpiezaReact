@@ -1,9 +1,6 @@
 import React from 'react';
 
-/**
- * CartItem represents a single product row in the cart page. It allows
- * users to adjust quantity and remove the item from the cart.
- */
+
 export default function CartItem({ item, updateQuantity, removeItem }) {
   const {
     id,

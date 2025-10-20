@@ -2,11 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext.jsx';
 
-/**
- * ProductCard displays basic details of a product along with an
- * add-to-cart button. When the product is on offer it shows both
- * the discounted price and the original price with a strike through.
- */
 export default function ProductCard({ product }) {
   const { addItem } = useCart();
   const {
