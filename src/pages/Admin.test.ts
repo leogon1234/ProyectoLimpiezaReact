@@ -1,4 +1,3 @@
-// tests/adminFieldsOnSiteProducts.test.ts
 import { describe, it, expect } from 'vitest'
 import { products } from '../data/products'
 
