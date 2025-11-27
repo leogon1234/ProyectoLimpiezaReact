@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getProductById } from '../data/products.js';
+import { useProducto } from '../hooks/useProducts.jsx';
 import { useCart } from '../contexts/CartContext.jsx';
 
 function resolveImage(img) {
@@ -15,12 +15,28 @@ function generateSku(id) {
 
 export default function DetalleProducto() {
   const { id } = useParams();
-  const product = getProductById(id);
+  const { producto, cargando, error } = useProducto(id);
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [tab, setTab] = useState('caracteristicas');
 
-  if (!product) {
+  if (cargando) {
+    return (
+      <div className="container py-4">
+        <p>Cargando producto...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container py-4">
+        <p className="text-danger">{error}</p>
+      </div>
+    );
+  }
+
+  if (!producto) {
     return (
       <div className="container py-4">
         <p className="text-muted">Producto no encontrado.</p>
@@ -28,22 +44,21 @@ export default function DetalleProducto() {
     );
   }
 
-  const price = product.oferta && product.precioOferta ? product.precioOferta : product.precio;
+  const price = producto.oferta && producto.precioOferta? producto.precioOferta: producto.precio;
 
   const handleAdd = () => {
-    addItem(product, quantity);
+    addItem(producto, quantity);
     setQuantity(1);
   };
 
   return (
     <div className="container py-4">
-      {/* ==== Bloque principal (imagen + info) ==== */}
       <div className="row g-4 align-items-start">
         <div className="col-md-5 text-center">
           <div className="dp-img-wrap mx-auto">
             <img
-              src={resolveImage(product.img)}
-              alt={product.nombre}
+              src={resolveImage(producto.img)}
+              alt={producto.nombre}
               className="dp-img"
               loading="lazy"
             />
@@ -51,27 +66,35 @@ export default function DetalleProducto() {
         </div>
         <div className="col-md-7">
           <div className="d-flex align-items-start justify-content-between mb-2">
-            <h2 className="fw-bold mb-0">{product.nombre}</h2>
-            <small className="text-muted ms-3">ID: {generateSku(product.id)}</small>
+            <h2 className="fw-bold mb-0">{producto.nombre}</h2>
+            <small className="text-muted ms-3">ID: {generateSku(producto.id)}</small>
           </div>
 
           <div className="dp-price my-2">
-            {product.oferta ? (
+            {producto.oferta ? (
               <>
-                <span className="dp-price-main">${product.precioOferta.toLocaleString()}</span>
+                <span className="dp-price-main">
+                  ${price.toLocaleString()}
+                </span>
                 <span className="text-muted text-decoration-line-through ms-2">
-                  ${product.precio.toLocaleString()}
+                  ${producto.precio.toLocaleString()}
                 </span>
               </>
             ) : (
-              <span className="dp-price-main">${price.toLocaleString()}</span>
+              <span className="dp-price-main">
+                ${price.toLocaleString()}
+              </span>
             )}
           </div>
 
-          <p className="text-muted mb-3">{product.desc}</p>
+          <p className="text-muted mb-3">
+            {producto.desc || producto.descripcionCorta || ''}
+          </p>
 
           <div className="d-flex align-items-center gap-2 mb-3">
-            <label htmlFor="cantidad" className="fw-semibold mb-0">Cantidad:</label>
+            <label htmlFor="cantidad" className="fw-semibold mb-0">
+              Cantidad:
+            </label>
             <input
               id="cantidad"
               type="number"
@@ -79,7 +102,9 @@ export default function DetalleProducto() {
               className="form-control"
               style={{ maxWidth: 90 }}
               value={quantity}
-              onChange={(e) => setQuantity(Math.max(1, Number(e.target.value)))}
+              onChange={(e) =>
+                setQuantity(Math.max(1, Number(e.target.value)))
+              }
             />
           </div>
           <button className="btn btn-success" onClick={handleAdd}>
@@ -120,20 +145,20 @@ export default function DetalleProducto() {
                 <div className="table-responsive">
                   <table className="table align-middle mb-0">
                     <tbody>
-                      {product.specs && Object.keys(product.specs).length ? (
-                        Object.entries(product.specs).map(([campo, valor]) => (
-                          <tr key={campo}>
-                            <th className="text-muted fw-normal" style={{ width: 260 }}>
-                              {campo}
-                            </th>
-                            <td className="fw-semibold">{valor}</td>
-                          </tr>
-                        ))
-                      ) : (
-                        <tr>
-                          <td className="text-muted">Sin información adicional</td>
-                        </tr>
-                      )}
+                      <tr>
+                        <th className="text-muted fw-normal" style={{ width: 260 }}>
+                          Categoría
+                        </th>
+                        <td className="fw-semibold">{producto.categoria || 'N/A'}</td>
+                      </tr>
+                      <tr>
+                        <th className="text-muted fw-normal">Stock</th>
+                        <td className="fw-semibold">{producto.stock ?? '—'}</td>
+                      </tr>
+                      <tr>
+                        <th className="text-muted fw-normal">IVA</th>
+                        <td className="fw-semibold">{producto.iva ?? '—'}</td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -141,7 +166,9 @@ export default function DetalleProducto() {
             ) : (
               <>
                 <h5 className="mb-3">Descripción</h5>
-                <p className="mb-0">{product.descripcionLarga}</p>
+                <p className="mb-0">
+                  {producto.descripcionLarga || 'Sin descripción adicional.'}
+                </p>
               </>
             )}
           </div>
