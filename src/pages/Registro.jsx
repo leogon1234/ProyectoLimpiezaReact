@@ -22,23 +22,19 @@ export default function Registro() {
   });
   const [error, setError] = useState(null);
 
-  // ---------- NUEVO: regiones/comunas ----------
-  const [regiones, setRegiones] = useState([]);        // [{code:'I', name:'Tarapacá', comunas:[...]}]
-  const [comunas, setComunas] = useState([]);          // comunas visibles según región
+  const [regiones, setRegiones] = useState([]);
+  const [comunas, setComunas] = useState([]);
 
-  // Orden oficial para mostrar regiones
   const REGION_ORDER = ['XV', 'I', 'II', 'III', 'IV', 'V', 'RM', 'VI', 'VII', 'VIII', 'IX', 'XIV', 'X', 'XI', 'XII', 'XVI'];
 
   useEffect(() => {
-    // Fuente abierta y estable con regiones y comunas de Chile
-    // (si quieres lo hacemos local en /src/data/cl-geo.json)
+
     const URL = 'https://raw.githubusercontent.com/ivanayala98/chile-regiones-y-comunas/master/comunas.json';
 
     (async () => {
       try {
         const res = await fetch(URL);
         const data = await res.json();
-        // data viene como [{ region: 'Tarapacá', prefix: 'I', communes: ['Alto Hospicio', ...] }, ...]
         const normalizado = data.map(r => ({
           code: r.prefix === 'RM' ? 'RM' : r.prefix, // ya viene correcto
           name: r.region,
@@ -52,7 +48,6 @@ export default function Registro() {
 
         setRegiones(normalizado);
       } catch (e) {
-        // Si falla el fetch, al menos dejamos las 4 opciones básicas que ya tenías
         setRegiones([
           { code: 'RM', name: 'Región Metropolitana', comunas: ['Santiago', 'Providencia', 'Ñuñoa', 'Otra'].sort((a,b)=>a.localeCompare(b,'es')) },
           { code: 'V', name: 'Valparaíso', comunas: ['Valparaíso', 'Viña del Mar', 'Quilpué', 'Otra'].sort((a,b)=>a.localeCompare(b,'es')) },
@@ -62,7 +57,6 @@ export default function Registro() {
       }
     })();
   }, []);
-  // ---------------------------------------------
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -82,8 +76,16 @@ export default function Registro() {
     e.preventDefault();
     setError(null);
     try {
-      await register(form.name, form.email, form.password);
-      navigate('/');
+      await register(
+        form.name,
+        form.email,
+        form.password,
+        form.rut,
+        form.region,
+        form.comuna
+      );
+
+      navigate("/login");
     } catch (err) {
       setError(err.message);
     }

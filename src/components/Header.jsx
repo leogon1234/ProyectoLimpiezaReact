@@ -6,6 +6,8 @@ import { useCart } from "../contexts/CartContext.jsx";
 export default function Header() {
   const { user, logout } = useUser();
   const { cart } = useCart();
+  const displayName = user?.nombre || user?.name || "Usuario";
+  const initial = displayName.charAt(0).toUpperCase();
 
   return (
     <header className="navbar navbar-expand-lg navbar-dark bg-brand shadow-sm py-2">
@@ -38,26 +40,40 @@ export default function Header() {
         <div className="collapse navbar-collapse" id="navbarContent">
           <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="nav-link fw-semibold" to="/">Inicio</Link>
+              <Link className="nav-link fw-semibold" to="/">
+                Inicio
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link fw-semibold" to="/productos">Productos</Link>
+              <Link className="nav-link fw-semibold" to="/productos">
+                Productos
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link fw-semibold" to="/ofertas">Ofertas</Link>
+              <Link className="nav-link fw-semibold" to="/ofertas">
+                Ofertas
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link fw-semibold" to="/nosotros">Nosotros</Link>
+              <Link className="nav-link fw-semibold" to="/nosotros">
+                Nosotros
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link fw-semibold" to="/contacto">Contacto</Link>
+              <Link className="nav-link fw-semibold" to="/contacto">
+                Contacto
+              </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link fw-semibold" to="/blogs">Blog</Link>
+              <Link className="nav-link fw-semibold" to="/blogs">
+                Blog
+              </Link>
             </li>
             {user?.isAdmin && (
               <li className="nav-item">
-                <Link className="nav-link fw-semibold" to="/admin">Panel</Link>
+                <Link className="nav-link fw-semibold" to="/admin">
+                  Panel
+                </Link>
               </li>
             )}
           </ul>
@@ -66,13 +82,19 @@ export default function Header() {
           <div className="d-flex align-items-center gap-2">
             {user ? (
               <>
-                <span className="text-white small me-1">
-                  Hola, <strong>{user.isAdmin ? "Administrador" : user.name}</strong>
-                </span>
-                <button
-                  className="btn btn-light btn-sm"
-                  onClick={logout}
-                >
+                <div className="d-flex align-items-center gap-2 me-2">
+                  <div className="text-white small">
+                    <div>
+                      Hola,{displayName}
+                    </div>
+                    {user.isAdmin && (
+                      <span className="badge bg-warning text-dark mt-1">
+                        Admin
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <button className="btn btn-light btn-sm" onClick={logout}>
                   Cerrar sesión
                 </button>
               </>
@@ -81,10 +103,14 @@ export default function Header() {
                 Iniciar sesión
               </Link>
             )}
-            <Link to="/carrito" className="btn btn-outline-light btn-sm d-flex align-items-center">
+            <Link
+              to="/carrito"
+              className="btn btn-outline-light btn-sm d-flex align-items-center">
               <i className="bi bi-cart3 me-1"></i> Carrito
               {cart.length > 0 && (
-                <span className="badge bg-light text-dark ms-2">{cart.length}</span>
+                <span className="badge bg-light text-dark ms-2">
+                  {cart.length}
+                </span>
               )}
             </Link>
           </div>
