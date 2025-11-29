@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import api from "../api/api.js";
 
 const ASUNTOS = [
-  { value: '', label: 'Selecciona un asunto' },
-  { value: 'Reembolso', label: 'Reembolso' },
-  { value: 'Devolución', label: 'Devolución' },
-  { value: 'Cambio de producto', label: 'Cambio de producto' },
-  { value: 'Consulta', label: 'Consulta general' },
-  { value: 'Sugerencia', label: 'Sugerencia' },
-  { value: 'Reclamo', label: 'Reclamo' },
+  { value: "", label: "Selecciona un asunto" },
+  { value: "Reembolso", label: "Reembolso" },
+  { value: "Devolución", label: "Devolución" },
+  { value: "Cambio de producto", label: "Cambio de producto" },
+  { value: "Consulta", label: "Consulta general" },
+  { value: "Sugerencia", label: "Sugerencia" },
+  { value: "Reclamo", label: "Reclamo" },
 ];
 
 export default function Contacto() {
-  const [form, setForm] = useState({ nombre: '', email: '', asunto: '', mensaje: '' });
+  const [form, setForm] = useState({
+    nombre: "",
+    email: "",
+    asunto: "",
+    mensaje: "",
+  });
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
@@ -21,21 +27,29 @@ export default function Contacto() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
-    setErrors({ ...errors, [name]: '' });
+    setErrors({ ...errors, [name]: "" });
   };
+  
+  const [contactos, setContactos] = useState([]);
 
   const validarContacto = () => {
     const newErrors = {};
-    if (!form.nombre.trim()) newErrors.nombre = 'El nombre es obligatorio.';
-    else if (!nameRegex.test(form.nombre)) newErrors.nombre = 'El nombre solo debe contener letras.';
-    if (!form.email.trim()) newErrors.email = 'El correo es obligatorio.';
-    else if (!emailRegex.test(form.email)) newErrors.email = 'El correo no tiene un formato válido.';
-    if (!form.asunto.trim()) newErrors.asunto = 'Debes seleccionar un asunto.';
-    if (!form.mensaje.trim()) newErrors.mensaje = 'El mensaje no puede estar vacío.';
+    if (!form.nombre.trim()) newErrors.nombre = "El nombre es obligatorio.";
+    else if (!nameRegex.test(form.nombre))
+      newErrors.nombre = "El nombre solo debe contener letras.";
+
+    if (!form.email.trim()) newErrors.email = "El correo es obligatorio.";
+    else if (!emailRegex.test(form.email))
+      newErrors.email = "El correo no tiene un formato válido.";
+
+    if (!form.asunto.trim()) newErrors.asunto = "Debes seleccionar un asunto.";
+    if (!form.mensaje.trim())
+      newErrors.mensaje = "El mensaje no puede estar vacío.";
+
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const validarErrores = validarContacto();
 
@@ -45,10 +59,16 @@ export default function Contacto() {
       return;
     }
 
-    console.log('Mensaje enviado', form);
-    setSubmitted(true);
-    setForm({ nombre: '', email: '', asunto: '', mensaje: '' });
-    setErrors({});
+    try {
+      await api.post("/contacto", form);
+      setSubmitted(true);
+      setForm({ nombre: "", email: "", asunto: "", mensaje: "" });
+      setErrors({});
+    } catch (err) {
+      console.error("Error enviando contacto", err);
+      alert("Ocurrió un error al enviar el mensaje. Inténtalo nuevamente.");
+      setSubmitted(false);
+    }
   };
 
   return (
@@ -59,7 +79,8 @@ export default function Contacto() {
           <p className="lf-eyebrow mb-2">Conectemos</p>
           <h1 className="lf-title mb-3">Envíanos tu mensaje</h1>
           <p className="text-muted mb-4">
-            ¿Tienes dudas o sugerencias? Completa el formulario y te responderemos a la brevedad.
+            ¿Tienes dudas o sugerencias? Completa el formulario y te
+            responderemos a la brevedad.
           </p>
           {submitted && (
             <div className="alert alert-success" role="alert">
@@ -72,30 +93,40 @@ export default function Contacto() {
                 <input
                   id="nombre"
                   type="text"
-                  className={`form-control lf-input ${errors.nombre ? 'is-invalid' : ''}`}
+                  className={`form-control lf-input ${
+                    errors.nombre ? "is-invalid" : ""
+                  }`}
                   placeholder="Nombre"
                   name="nombre"
                   value={form.nombre}
                   onChange={handleChange}
                 />
-                {errors.nombre && <div className="invalid-feedback">{errors.nombre}</div>}
+                {errors.nombre && (
+                  <div className="invalid-feedback">{errors.nombre}</div>
+                )}
               </div>
               <div className="col-md-6">
                 <input
                   id="email"
                   type="email"
-                  className={`form-control lf-input ${errors.email ? 'is-invalid' : ''}`}
+                  className={`form-control lf-input ${
+                    errors.email ? "is-invalid" : ""
+                  }`}
                   placeholder="Correo"
                   name="email"
                   value={form.email}
                   onChange={handleChange}
                 />
-                {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+                {errors.email && (
+                  <div className="invalid-feedback">{errors.email}</div>
+                )}
               </div>
               <div className="col-12">
                 <select
                   id="asunto"
-                  className={`form-select lf-input ${errors.asunto ? 'is-invalid' : ''}`}
+                  className={`form-select lf-input ${
+                    errors.asunto ? "is-invalid" : ""
+                  }`}
                   name="asunto"
                   value={form.asunto}
                   onChange={handleChange}
@@ -106,19 +137,25 @@ export default function Contacto() {
                     </option>
                   ))}
                 </select>
-                {errors.asunto && <div className="invalid-feedback">{errors.asunto}</div>}
+                {errors.asunto && (
+                  <div className="invalid-feedback">{errors.asunto}</div>
+                )}
               </div>
               <div className="col-12">
                 <textarea
                   id="mensaje"
-                  className={`form-control lf-input ${errors.mensaje ? 'is-invalid' : ''}`}
+                  className={`form-control lf-input ${
+                    errors.mensaje ? "is-invalid" : ""
+                  }`}
                   rows="5"
                   placeholder="Mensaje"
                   name="mensaje"
                   value={form.mensaje}
                   onChange={handleChange}
                 ></textarea>
-                {errors.mensaje && <div className="invalid-feedback">{errors.mensaje}</div>}
+                {errors.mensaje && (
+                  <div className="invalid-feedback">{errors.mensaje}</div>
+                )}
               </div>
               <div className="col-12">
                 <button type="submit" className="btn lf-btn w-100 py-3">
@@ -128,7 +165,7 @@ export default function Contacto() {
             </div>
           </form>
         </div>
-        {/* Columna derecha: mapa */}
+        {/* Columna derecha: mapa (igual que ya tenías) */}
         <div className="col-lg-6">
           <div className="ratio ratio-4x3 ratio-lg-1x1">
             <iframe
@@ -140,7 +177,7 @@ export default function Contacto() {
           </div>
         </div>
       </div>
-      {/* Tarjetas de contacto */}
+      {/* Tarjetas de contacto (igual que ya tenías) */}
       <div className="row g-3 mt-5">
         <div className="col-sm-6 col-lg-3">
           <div className="lf-card d-flex align-items-center p-3">

@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import ProductCard from "../components/ProductCard.jsx";
-import useProducts from "../hooks/useProducts.jsx"
+import useProducts from "../hooks/useProducts.jsx";
+import { Categorias } from "../data/categorias.js";
 export default function Products() {
   const { productos, cargando, error } = useProducts();
 
@@ -8,7 +9,7 @@ export default function Products() {
   const [busqueda, setBusqueda] = useState("");
 
   const categorias = useMemo(() => {
-    const set = new Set();
+    const set = new Set(Categorias);
 
     productos.forEach((p) => {
       if (p.categoria) {
@@ -20,15 +21,13 @@ export default function Products() {
   }, [productos]);
 
   const productosFiltrados = useMemo(() => {
+    const texto = busqueda.toLowerCase();
     return productos.filter((p) => {
       const coincideCategoria =
         categoriaSeleccionada === "Todas" ||
         p.categoria === categoriaSeleccionada;
 
-      const coincideTexto = p.nombre
-        ?.toLowerCase()
-        .includes(busqueda.toLowerCase());
-
+      const coincideTexto = !texto? true: (p.nombre ?? "").toLowerCase().includes(texto);
       return coincideCategoria && coincideTexto;
     });
   }, [productos, categoriaSeleccionada, busqueda]);
