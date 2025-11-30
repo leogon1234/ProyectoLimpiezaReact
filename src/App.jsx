@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import Home from './pages/Home.jsx';
@@ -22,7 +22,8 @@ export default function App() {
     <div className="d-flex flex-column min-vh-100">
       <Header />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Navigate to="/registro" replace />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/productos" element={<Products />} />
           <Route path="/ofertas" element={<Ofertas />} />
           <Route path="/carrito" element={<Carrito />} />

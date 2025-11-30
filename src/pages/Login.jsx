@@ -29,7 +29,7 @@ export default function Login() {
       if (logged && logged.isAdmin) {
         navigate('/admin');
       } else {
-        navigate('/');
+        navigate('/home');
       }
     } catch (err) {
       setError(err.message);

@@ -2,12 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useUser } from "../contexts/UserContext.jsx";
 import { useCart } from "../contexts/CartContext.jsx";
-
+import { useNavigate } from "react-router-dom";
 export default function Header() {
   const { user, logout } = useUser();
   const { cart } = useCart();
   const displayName = user?.nombre || user?.name || "Usuario";
   const initial = displayName.charAt(0).toUpperCase();
+   const navigate = useNavigate();
 
   return (
     <header className="navbar navbar-expand-lg navbar-dark bg-brand shadow-sm py-2">
@@ -40,7 +41,7 @@ export default function Header() {
         <div className="collapse navbar-collapse" id="navbarContent">
           <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
             <li className="nav-item">
-              <Link className="nav-link fw-semibold" to="/">
+              <Link className="nav-link fw-semibold" to="/home">
                 Inicio
               </Link>
             </li>
@@ -94,7 +95,10 @@ export default function Header() {
                     )}
                   </div>
                 </div>
-                <button className="btn btn-light btn-sm" onClick={logout}>
+                <button className="btn btn-light btn-sm" onClick={()=>{
+                  logout();
+                  navigate("/registro");
+                }} >
                   Cerrar sesión
                 </button>
               </>
