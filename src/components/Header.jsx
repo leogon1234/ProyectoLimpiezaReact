@@ -14,7 +14,7 @@ export default function Header() {
     <header className="navbar navbar-expand-lg navbar-dark bg-brand shadow-sm py-2">
       <div className="container-fluid px-4">
         {/* IZQUIERDA DEL HEADER */}
-        <Link to="/" className="navbar-brand d-flex align-items-center gap-2">
+        <Link to="/home" className="navbar-brand d-flex align-items-center gap-2">
           <img
             src="/img/logo.jpg"
             alt="Logo LimpiFresh"
