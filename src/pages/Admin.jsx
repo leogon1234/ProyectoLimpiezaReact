@@ -302,7 +302,7 @@ export default function Admin() {
           </span>
         </div>
         {/* Productos*/}
-        <section id="productos" className="card shadow-sm p-4 mb-5">
+        <section id="productos" className="admin-box p-4 mb-5 text-black border border-dark rounded">
           <h2 className="mb-3">
             <i className="bi bi-plus-circle me-2" />
             Agregar / Editar Producto
@@ -311,9 +311,9 @@ export default function Admin() {
             <div className="row g-3">
               <div className="col-md-6">
                 <label className="form-label">Nombre</label>
-                <input
+                <input 
                   name="nombre"
-                  className="form-control"
+                  className="form-control border-dark"
                   value={form.nombre}
                   onChange={handleChange}
                   required
@@ -324,7 +324,7 @@ export default function Admin() {
                 <input
                   name="precio"
                   type="number"
-                  className="form-control"
+                  className="form-control border-dark"
                   value={form.precio}
                   onChange={handleChange}
                   required
@@ -335,7 +335,7 @@ export default function Admin() {
                 <input
                   name="iva"
                   type="number"
-                  className="form-control"
+                  className="form-control border-dark "
                   value={form.iva}
                   onChange={handleChange}
                   required
@@ -346,7 +346,7 @@ export default function Admin() {
                 <input
                   name="stock"
                   type="number"
-                  className="form-control"
+                  className="form-control border-dark"
                   value={form.stock}
                   onChange={handleChange}
                   required
@@ -356,7 +356,7 @@ export default function Admin() {
                 <label className="form-label">Categoría</label>
                 <select
                   name="categoria"
-                  className="form-select"
+                  className="form-select form-control border-dark"
                   value={form.categoria}
                   onChange={handleChange}
                 >
@@ -388,7 +388,7 @@ export default function Admin() {
                   <input
                     name="precioOferta"
                     type="number"
-                    className="form-control"
+                    className="form-control border-dark"
                     value={form.precioOferta}
                     onChange={handleChange}
                     required
@@ -399,7 +399,7 @@ export default function Admin() {
                 <label className="form-label">Descripción</label>
                 <textarea
                   name="desc"
-                  className="form-control"
+                  className="form-control border-dark"
                   rows="3"
                   value={form.desc}
                   onChange={handleChange}
@@ -421,7 +421,7 @@ export default function Admin() {
           </form>
         </section>
         {/* TABLA PRODUCTOS */}
-        <section className="card shadow-sm p-4 mb-5">
+        <section className="admin-box p-4 mb-5 text-black form-control border-dark">
           <h3 className="mb-3">
             <i className="bi bi-box2-heart me-2" />
             Productos guardados
@@ -484,7 +484,7 @@ export default function Admin() {
         </section>
       
         {/* BLOGS */}
-        <section id="blogs" className="card shadow-sm p-4 mb-5">
+        <section id="blogs" className="admin-box p-4 mb-5 form-control border-dark">
           <h3 className="mb-4">
             <i className="bi bi-journal-text me-2" />
             Administrar Blogs
@@ -496,7 +496,7 @@ export default function Admin() {
                 <label className="form-label">Título</label>
                 <input
                   name="titulo"
-                  className="form-control"
+                  className="form-control border-dark"
                   value={blogForm.titulo}
                   onChange={handleBlogChange}
                   required
@@ -506,7 +506,7 @@ export default function Admin() {
                 <label className="form-label">Contenido</label>
                 <textarea
                   name="contenido"
-                  className="form-control"
+                  className="form-control border-dark"
                   rows="4"
                   value={blogForm.contenido}
                   onChange={handleBlogChange}
@@ -565,7 +565,7 @@ export default function Admin() {
         </section>
 
         {/* Contacto */}
-        <section id="contactos" className="card shadow-sm p-4 mb-5">
+        <section id="contactos" className="admin-box p-4 mb-5 form-control border-dark">
           <h3 className="mb-3">
             <i className="bi bi-envelope-paper-heart me-2" />
             Mensajes de contacto
