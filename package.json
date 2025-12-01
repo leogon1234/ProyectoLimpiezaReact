@@ -1,6 +1,5 @@
 {
   "name": "reactproyecto",
-  "homepage": "https://leogon1234.github.io/limpifresh_pages/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,8 +8,6 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
     "test": "vitest",
     "test:watch": "vitest --watch"
   },
