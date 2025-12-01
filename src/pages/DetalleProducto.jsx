@@ -3,12 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useProducto } from '../hooks/useProducts.jsx';
 import { useCart } from '../contexts/CartContext.jsx';
 
-function resolveImage(img) {
-  if (!img) return '';
-  const file = img.split('/').pop();
-  return new URL(`/src/assets/img/${file}`, import.meta.url).href;
-}
-
 function generateSku(id) {
   return `SKU-${id}`;
 }
@@ -44,7 +38,9 @@ export default function DetalleProducto() {
     );
   }
 
-  const price = producto.oferta && producto.precioOferta? producto.precioOferta: producto.precio;
+  const price = producto.oferta && producto.precioOferta
+    ? producto.precioOferta
+    : producto.precio;
 
   const handleAdd = () => {
     addItem(producto, quantity);
@@ -57,13 +53,14 @@ export default function DetalleProducto() {
         <div className="col-md-5 text-center">
           <div className="dp-img-wrap mx-auto">
             <img
-              src={resolveImage(producto.img)}
+              src={producto.img || "https://via.placeholder.com/400?text=Sin+Imagen"}
               alt={producto.nombre}
               className="dp-img"
               loading="lazy"
             />
           </div>
         </div>
+
         <div className="col-md-7">
           <div className="d-flex align-items-start justify-content-between mb-2">
             <h2 className="fw-bold mb-0">{producto.nombre}</h2>
@@ -92,9 +89,7 @@ export default function DetalleProducto() {
           </p>
 
           <div className="d-flex align-items-center gap-2 mb-3">
-            <label htmlFor="cantidad" className="fw-semibold mb-0">
-              Cantidad:
-            </label>
+            <label htmlFor="cantidad" className="fw-semibold mb-0">Cantidad:</label>
             <input
               id="cantidad"
               type="number"
@@ -107,6 +102,7 @@ export default function DetalleProducto() {
               }
             />
           </div>
+
           <button className="btn btn-success" onClick={handleAdd}>
             Agregar al carrito
           </button>
