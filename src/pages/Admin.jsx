@@ -56,7 +56,7 @@ export default function Admin() {
       oferta: false,
       precioOferta: "",
       categoria: Categorias[0] ?? "General",
-      img: "", // 🔹 también lo limpiamos
+      img: "",
     });
     setEditingIndex(null);
   };
@@ -94,7 +94,7 @@ export default function Admin() {
       oferta,
       precioOferta: oferta ? toInt(precioOferta) : null,
       categoria: categoria || "General",
-      img: img?.trim() || null, // 🔹 se envía al backend, coincide con tu modelo Java
+      img: img?.trim() || null,
     };
 
     try {
@@ -146,7 +146,7 @@ export default function Admin() {
       oferta: !!p.oferta,
       precioOferta: p.precioOferta ?? "",
       categoria: p.categoria || (Categorias[0] ?? "General"),
-      img: p.img || "", // 🔹 cargamos la URL de imagen existente
+      img: p.img || "",
     });
     setEditingIndex(i);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -155,7 +155,11 @@ export default function Admin() {
   // Blogs backend
   const [blogs, setBlogs] = useState([]);
   const [blogEditingIndex, setBlogEditingIndex] = useState(null);
-  const [blogForm, setBlogForm] = useState({ titulo: "", contenido: "" });
+  const [blogForm, setBlogForm] = useState({
+    titulo: "",
+    contenido: "",
+    imagenUrl: "",       
+  });
 
   const handleBlogChange = (e) => {
     const { name, value } = e.target;
@@ -163,7 +167,7 @@ export default function Admin() {
   };
 
   const clearBlogForm = () => {
-    setBlogForm({ titulo: "", contenido: "" });
+    setBlogForm({ titulo: "", contenido: "", imagenUrl: "" });
     setBlogEditingIndex(null);
   };
 
@@ -179,13 +183,14 @@ export default function Admin() {
 
   const handleBlogSubmit = async (e) => {
     e.preventDefault();
-    const { titulo, contenido } = blogForm;
+    const { titulo, contenido, imagenUrl } = blogForm;
     if (!titulo.trim()) return alert("Ingresa el título del blog.");
     if (!contenido.trim()) return alert("Ingresa el contenido del blog.");
 
     const payload = {
       titulo: titulo.trim(),
       contenido: contenido.trim(),
+      imagenUrl: imagenUrl?.trim() || null,   // 🔹 se envía la URL (puede ser null)
     };
 
     try {
@@ -215,7 +220,11 @@ export default function Admin() {
   const handleBlogEdit = (i) => {
     const b = blogs[i];
     if (!b) return;
-    setBlogForm({ titulo: b.titulo || "", contenido: b.contenido || "" });
+    setBlogForm({
+      titulo: b.titulo || "",
+      contenido: b.contenido || "",
+      imagenUrl: b.imagenUrl || "",   // 🔹 cargamos la url existente
+    });
     setBlogEditingIndex(i);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -549,6 +558,32 @@ export default function Admin() {
                   required
                 />
               </div>
+
+              <div className="col-md-6">
+                <label className="form-label">Imagen (URL)</label>
+                <input
+                  name="imagenUrl"
+                  type="url"
+                  className="form-control border-dark"
+                  placeholder="https://tuservidor.com/img/blog.jpg"
+                  value={blogForm.imagenUrl}
+                  onChange={handleBlogChange}
+                />
+                {blogForm.imagenUrl && (
+                  <div className="mt-2">
+                    <span className="small text-muted d-block">
+                      Vista previa:
+                    </span>
+                    <img
+                      src={blogForm.imagenUrl}
+                      alt="Vista previa blog"
+                      className="img-fluid rounded shadow-sm"
+                      style={{ maxHeight: "160px", objectFit: "cover" }}
+                    />
+                  </div>
+                )}
+              </div>
+
               <div className="col-12">
                 <label className="form-label">Contenido</label>
                 <textarea
@@ -569,7 +604,7 @@ export default function Admin() {
               >
                 Limpiar
               </button>
-              <button type="submit" className="btn btn-success">
+              <button type="submit" className="btn btn.success btn-success">
                 {blogEditingIndex === null ? "Guardar Blog" : "Actualizar Blog"}
               </button>
             </div>
@@ -582,6 +617,14 @@ export default function Admin() {
               {blogs.map((b, i) => (
                 <div className="col-md-4" key={b.id ?? i}>
                   <div className="card h-100 shadow-sm">
+                    {b.imagenUrl && (
+                      <img
+                        src={b.imagenUrl}
+                        alt={b.titulo}
+                        className="card-img-top"
+                        style={{ maxHeight: "180px", objectFit: "cover" }}
+                      />
+                    )}
                     <div className="card-body">
                       <h5>{b.titulo}</h5>
                       <p
