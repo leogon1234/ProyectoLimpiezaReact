@@ -20,7 +20,7 @@ export function UserProvider({ children }) {
   // ---------- LOGIN ----------
   const login = async (email, password) => {
     try {
-      const res = await api.post("/auth/login", { email, password });
+      const res = await api.post("/api/auth/login", { email, password });
       const backendUser = res.data;
 
       const mappedUser = {
@@ -49,7 +49,7 @@ export function UserProvider({ children }) {
   // ---------- REGISTRO ----------
   const register = async (name, email, password, rut, region, comuna) => {
     try {
-      await api.post("/auth/registro", {
+      await api.post("/api/auth/registro", {
         nombre: name,
         email,
         password,

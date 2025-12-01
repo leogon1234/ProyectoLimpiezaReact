@@ -63,7 +63,7 @@ export default function Admin() {
 
   useEffect(() => {
     api
-      .get("/productos")
+      .get("/api/productos")
       .then((r) => setProducts(r.data || []))
       .catch((e) => {
         console.error("Error cargando productos", e);
@@ -99,11 +99,11 @@ export default function Admin() {
 
     try {
       if (editingIndex === null) {
-        const r = await api.post("/productos", payload);
+        const r = await api.post("/api/productos", payload);
         setProducts((p) => [...p, r.data]);
       } else {
         const original = products[editingIndex];
-        const r = await api.put(`/productos/${original.id}`, {
+        const r = await api.put(`/api/productos/${original.id}`, {
           ...payload,
           id: original.id,
         });
@@ -125,7 +125,7 @@ export default function Admin() {
     if (!producto) return;
     if (!window.confirm("¿Eliminar este producto?")) return;
     try {
-      await api.delete(`/productos/${producto.id}`);
+      await api.delete(`/api/productos/${producto.id}`);
       setProducts((p) => p.filter((_, idx) => idx !== i));
       if (editingIndex === i) clearForm();
     } catch (e) {
@@ -173,7 +173,7 @@ export default function Admin() {
 
   useEffect(() => {
     api
-      .get("/blogs")
+      .get("/api/blogs")
       .then((r) => setBlogs(r.data || []))
       .catch((e) => {
         console.error("Error cargando blogs", e);
@@ -195,12 +195,12 @@ export default function Admin() {
 
     try {
       if (blogEditingIndex === null) {
-        const r = await api.post("/blogs", payload);
+        const r = await api.post("/api/blogs", payload);
         setBlogs((p) => [...p, r.data]);
       } else {
         const original = blogs[blogEditingIndex];
         if (!original) return;
-        const r = await api.put(`/blogs/${original.id}`, {
+        const r = await api.put(`/api/blogs/${original.id}`, {
           ...payload,
           id: original.id,
         });
@@ -234,7 +234,7 @@ export default function Admin() {
     if (!b) return;
     if (!window.confirm("¿Eliminar este blog?")) return;
     try {
-      await api.delete(`/blogs/${b.id}`);
+      await api.delete(`/api/blogs/${b.id}`);
       setBlogs((p) => p.filter((_, idx) => idx !== i));
       if (blogEditingIndex === i) clearBlogForm();
     } catch (e) {
@@ -248,7 +248,7 @@ export default function Admin() {
 
   useEffect(() => {
     api
-      .get("/contacto")
+      .get("/api/contacto")
       .then((r) => setContactos(r.data || []))
       .catch((e) => {
         console.error("Error cargando contactos", e);
@@ -259,7 +259,7 @@ export default function Admin() {
   const handleContactoDelete = async (id) => {
     if (!window.confirm("¿Eliminar este mensaje de contacto?")) return;
     try {
-      await api.delete(`/contacto/${id}`);
+      await api.delete(`/api/contacto/${id}`);
       setContactos((prev) => prev.filter((c) => c.id !== id));
     } catch (e) {
       console.error("Error eliminando contacto", e);

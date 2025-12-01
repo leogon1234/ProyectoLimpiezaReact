@@ -6,7 +6,7 @@ export default function useProductos() {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    api.get("/productos")
+    api.get("/api/productos")
       .then(res => setProductos(res.data))
       .catch(() => setError("Error al cargar productos"))
       .finally(() => setCargando(false));
@@ -23,7 +23,7 @@ export function useProducto(id) {
     setCargando(true);
 
     api
-      .get(`/productos/${id}`)
+      .get(`/api/productos/${id}`)
       .then((res) => {
         setProducto(res.data);
       })

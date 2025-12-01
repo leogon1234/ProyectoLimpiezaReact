@@ -9,7 +9,7 @@ export default function Blogs() {
 
   useEffect(() => {
     api
-      .get("/blogs")
+      .get("/api/blogs")
       .then((res) => {
         setBlogs(res.data || []);
       })
