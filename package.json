@@ -1,6 +1,6 @@
 {
   "name": "reactproyecto",
-  "homepage": "https://leogon1234.github.io/ProyectoLimpiezaReact",
+  "homepage": "https://leogon1234.github.io/limpifresh_pages/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,11 +9,10 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy":"npm run build",
-    "deploy":"gh-pages -d dist",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "test": "vitest",
-    "test:watch": "vitest --watch",
-    "deploy": "npm run build && gh-pages -d dist"
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "axios": "^1.13.2",
