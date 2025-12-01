@@ -18,7 +18,7 @@ export default function Admin() {
 
   const DEFAULT_IVA = 19;
 
-  // -Productos backedn
+  // Productos backend
   const [products, setProducts] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [form, setForm] = useState({
@@ -30,6 +30,7 @@ export default function Admin() {
     oferta: false,
     precioOferta: "",
     categoria: Categorias[0] ?? "General",
+    img: "",
   });
 
   const toInt = (v) => {
@@ -37,6 +38,7 @@ export default function Admin() {
     const n = String(v).replace(/[^0-9-]/g, "");
     return n ? Math.round(parseInt(n, 10)) : 0;
   };
+
   const formatCLP = (n) => "$" + toInt(n).toLocaleString("es-CL");
 
   const handleChange = (e) => {
@@ -54,6 +56,7 @@ export default function Admin() {
       oferta: false,
       precioOferta: "",
       categoria: Categorias[0] ?? "General",
+      img: "", // 🔹 también lo limpiamos
     });
     setEditingIndex(null);
   };
@@ -70,7 +73,7 @@ export default function Admin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { nombre, desc, precio, iva, stock, oferta, precioOferta, categoria } =
+    const { nombre, desc, precio, iva, stock, oferta, precioOferta, categoria, img } =
       form;
 
     if (!nombre.trim()) return alert("Ingresa el nombre del producto.");
@@ -91,6 +94,7 @@ export default function Admin() {
       oferta,
       precioOferta: oferta ? toInt(precioOferta) : null,
       categoria: categoria || "General",
+      img: img?.trim() || null, // 🔹 se envía al backend, coincide con tu modelo Java
     };
 
     try {
@@ -142,6 +146,7 @@ export default function Admin() {
       oferta: !!p.oferta,
       precioOferta: p.precioOferta ?? "",
       categoria: p.categoria || (Categorias[0] ?? "General"),
+      img: p.img || "", // 🔹 cargamos la URL de imagen existente
     });
     setEditingIndex(i);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -252,6 +257,7 @@ export default function Admin() {
       alert("No se pudo eliminar el mensaje de contacto.");
     }
   };
+
   const [catFilter, setCatFilter] = useState("Todas");
   const [q, setQ] = useState("");
   const categorias = ["Todas", ...Array.from(new Set(siteProducts.map((p) => p.categoria)))];
@@ -294,6 +300,7 @@ export default function Admin() {
           </li>
         </ul>
       </aside>
+
       <main className="main-content flex-grow-1 p-4 bg-light overflow-auto">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h1 className="fw-bold text-brand">Panel de Administración</h1>
@@ -301,17 +308,22 @@ export default function Admin() {
             Admin: {user?.name || "Administrador"}
           </span>
         </div>
-        {/* Productos*/}
-        <section id="productos" className="admin-box p-4 mb-5 text-black border border-dark rounded">
+
+        {/* Productos */}
+        <section
+          id="productos"
+          className="admin-box p-4 mb-5 text-black border border-dark rounded"
+        >
           <h2 className="mb-3">
             <i className="bi bi-plus-circle me-2" />
             Agregar / Editar Producto
           </h2>
+
           <form onSubmit={handleSubmit} autoComplete="off">
             <div className="row g-3">
               <div className="col-md-6">
                 <label className="form-label">Nombre</label>
-                <input 
+                <input
                   name="nombre"
                   className="form-control border-dark"
                   value={form.nombre}
@@ -319,6 +331,7 @@ export default function Admin() {
                   required
                 />
               </div>
+
               <div className="col-md-6">
                 <label className="form-label">Precio (sin IVA)</label>
                 <input
@@ -330,17 +343,19 @@ export default function Admin() {
                   required
                 />
               </div>
+
               <div className="col-md-4">
                 <label className="form-label">IVA (%)</label>
                 <input
                   name="iva"
                   type="number"
-                  className="form-control border-dark "
+                  className="form-control border-dark"
                   value={form.iva}
                   onChange={handleChange}
                   required
                 />
               </div>
+
               <div className="col-md-4">
                 <label className="form-label">Stock</label>
                 <input
@@ -352,6 +367,7 @@ export default function Admin() {
                   required
                 />
               </div>
+
               <div className="col-md-4">
                 <label className="form-label">Categoría</label>
                 <select
@@ -367,7 +383,33 @@ export default function Admin() {
                   ))}
                 </select>
               </div>
-              <div className="col-md-4 d-flex align-items-center mt-4">
+
+              {/* 🔹 NUEVO: campo para la URL de la imagen + vista previa */}
+              <div className="col-md-12">
+                <label className="form-label">Imagen del producto (URL)</label>
+                <input
+                  name="img"
+                  type="url"
+                  className="form-control border-dark"
+                  value={form.img}
+                  onChange={handleChange}
+                  placeholder="https://tuservidor.com/img/producto.jpg"
+                />
+                {form.img && (
+                  <div className="mt-2">
+                    <span className="small text-muted d-block">
+                      Vista previa:
+                    </span>
+                    <img
+                      src={form.img}
+                      alt="Vista previa producto"
+                      className="preview-img-admin"
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="col-md-4 d-flex align-items-center mt-2">
                 <div className="form-check">
                   <input
                     id="oferta"
@@ -382,6 +424,7 @@ export default function Admin() {
                   </label>
                 </div>
               </div>
+
               {form.oferta && (
                 <div className="col-md-4">
                   <label className="form-label">Precio oferta</label>
@@ -395,6 +438,7 @@ export default function Admin() {
                   />
                 </div>
               )}
+
               <div className="col-md-12">
                 <label className="form-label">Descripción</label>
                 <textarea
@@ -406,6 +450,7 @@ export default function Admin() {
                 />
               </div>
             </div>
+
             <div className="d-flex justify-content-end gap-2 mt-3">
               <button
                 type="reset"
@@ -420,6 +465,7 @@ export default function Admin() {
             </div>
           </form>
         </section>
+
         {/* TABLA PRODUCTOS */}
         <section className="admin-box p-4 mb-5 text-black form-control border-dark">
           <h3 className="mb-3">
@@ -482,9 +528,12 @@ export default function Admin() {
             </table>
           </div>
         </section>
-      
+
         {/* BLOGS */}
-        <section id="blogs" className="admin-box p-4 mb-5 form-control border-dark">
+        <section
+          id="blogs"
+          className="admin-box p-4 mb-5 form-control border-dark"
+        >
           <h3 className="mb-4">
             <i className="bi bi-journal-text me-2" />
             Administrar Blogs
@@ -527,6 +576,7 @@ export default function Admin() {
               </button>
             </div>
           </form>
+
           {blogs.length === 0 ? (
             <p className="text-muted">No hay blogs creados.</p>
           ) : (
@@ -564,8 +614,11 @@ export default function Admin() {
           )}
         </section>
 
-        {/* Contacto */}
-        <section id="contactos" className="admin-box p-4 mb-5 form-control border-dark">
+        {/* CONTACTO */}
+        <section
+          id="contactos"
+          className="admin-box p-4 mb-5 form-control border-dark"
+        >
           <h3 className="mb-3">
             <i className="bi bi-envelope-paper-heart me-2" />
             Mensajes de contacto
@@ -590,7 +643,9 @@ export default function Admin() {
                       <td>{c.nombre}</td>
                       <td>{c.email}</td>
                       <td>{c.asunto}</td>
-                      <td style={{ maxWidth: "300px", whiteSpace: "pre-wrap" }}>
+                      <td
+                        style={{ maxWidth: "300px", whiteSpace: "pre-wrap" }}
+                      >
                         {c.mensaje}
                       </td>
                       <td>
