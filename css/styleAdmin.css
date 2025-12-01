@@ -245,3 +245,11 @@ footer a:hover {
     margin-left: 0;
   }
 }
+
+.preview-img-admin {
+  max-height: 80px;
+  border-radius: 6px;
+  margin-top: 4px;
+  border: 1px solid var(--lf-border);
+  object-fit: cover;
+}
