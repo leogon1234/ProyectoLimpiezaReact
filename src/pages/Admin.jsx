@@ -383,8 +383,6 @@ export default function Admin() {
                   ))}
                 </select>
               </div>
-
-              {/* 🔹 NUEVO: campo para la URL de la imagen + vista previa */}
               <div className="col-md-12">
                 <label className="form-label">Imagen del producto (URL)</label>
                 <input
