@@ -22,79 +22,32 @@ export default function Registro() {
     comuna: '',
   });
 
-  const [error, setError] = useState(null);        // error general (backend)
-  const [errors, setErrors] = useState({});        // errores por campo
+  const [error, setError] = useState(null);        
+  const [errors, setErrors] = useState({});        
+  const [showPassword, setShowPassword] = useState(false); // 👈 AGREGADO
 
   const [regiones, setRegiones] = useState([]);
   const [comunas, setComunas] = useState([]);
 
   const REGION_ORDER = ['XV', 'I', 'II', 'III', 'IV', 'V', 'RM', 'VI', 'VII', 'VIII', 'IX', 'XIV', 'X', 'XI', 'XII', 'XVI'];
 
-  // ========= REGEX / VALIDADORES =========
   const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
   const NAME_RE = /^[A-Za-zÁÉÍÓÚÑáéíóúÜü ]+$/;
-  // Formato con puntos y guión
   const RUT_FORMAT_RE = /^\d{1,2}\.\d{3}\.\d{3}-[\dkK]$/;
 
-  // TODAS LAS COMUNAS DE LA REGIÓN METROPOLITANA (SANTIAGO), ORDENADAS
   const RM_COMUNAS = [
-    'Alhué',
-    'Buin',
-    'Calera de Tango',
-    'Cerrillos',
-    'Cerro Navia',
-    'Colina',
-    'Conchalí',
-    'Curacaví',
-    'El Bosque',
-    'El Monte',
-    'Estación Central',
-    'Huechuraba',
-    'Independencia',
-    'Isla de Maipo',
-    'La Cisterna',
-    'La Florida',
-    'La Granja',
-    'La Pintana',
-    'La Reina',
-    'Lampa',
-    'Las Condes',
-    'Lo Barnechea',
-    'Lo Espejo',
-    'Lo Prado',
-    'Macul',
-    'Maipú',
-    'María Pinto',
-    'Melipilla',
-    'Padre Hurtado',
-    'Paine',
-    'Pedro Aguirre Cerda',
-    'Peñaflor',
-    'Peñalolén',
-    'Pirque',
-    'Providencia',
-    'Pudahuel',
-    'Puente Alto',
-    'Quilicura',
-    'Quinta Normal',
-    'Recoleta',
-    'Renca',
-    'San Bernardo',
-    'San Joaquín',
-    'San José de Maipo',
-    'San Miguel',
-    'San Pedro',
-    'San Ramón',
-    'Santiago',
-    'Talagante',
-    'Tiltil',
-    'Vitacura'
+    'Alhué','Buin','Calera de Tango','Cerrillos','Cerro Navia','Colina','Conchalí','Curacaví',
+    'El Bosque','El Monte','Estación Central','Huechuraba','Independencia','Isla de Maipo',
+    'La Cisterna','La Florida','La Granja','La Pintana','La Reina','Lampa','Las Condes',
+    'Lo Barnechea','Lo Espejo','Lo Prado','Macul','Maipú','María Pinto','Melipilla',
+    'Padre Hurtado','Paine','Pedro Aguirre Cerda','Peñaflor','Peñalolén','Pirque','Providencia',
+    'Pudahuel','Puente Alto','Quilicura','Quinta Normal','Recoleta','Renca','San Bernardo',
+    'San Joaquín','San José de Maipo','San Miguel','San Pedro','San Ramón','Santiago',
+    'Talagante','Tiltil','Vitacura'
   ].sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
 
-  // Limpia el RUT (sin puntos ni guión)
   const cleanRut = (rut) => rut.replace(/[.\-]/g, '').toUpperCase();
 
-  // Valida RUT chileno con dígito verificador
   const isValidRut = (rut) => {
     if (!rut) return false;
     const rutClean = cleanRut(rut);
@@ -127,56 +80,35 @@ export default function Registro() {
   const validateForm = () => {
     const newErrors = {};
 
-    // Nombre
-    const nameTrim = form.name.trim();
-    if (!nameTrim) {
-      newErrors.name = 'El nombre es obligatorio.';
-    } else if (nameTrim.length < 3) {
+    if (!form.name.trim()) newErrors.name = 'El nombre es obligatorio.';
+    else if (form.name.trim().length < 3)
       newErrors.name = 'El nombre debe tener al menos 3 caracteres.';
-    } else if (!NAME_RE.test(nameTrim)) {
+    else if (!NAME_RE.test(form.name.trim()))
       newErrors.name = 'El nombre solo puede contener letras y espacios.';
-    }
 
-    // Email
-    const emailTrim = form.email.trim();
-    if (!emailTrim) {
-      newErrors.email = 'El correo es obligatorio.';
-    } else if (!EMAIL_RE.test(emailTrim)) {
+    if (!form.email.trim()) newErrors.email = 'El correo es obligatorio.';
+    else if (!EMAIL_RE.test(form.email.trim()))
       newErrors.email = 'Ingresa un correo válido.';
-    }
 
-    // Password
-    if (!form.password) {
-      newErrors.password = 'La contraseña es obligatoria.';
-    } else if (form.password.length < 8) {
-      newErrors.password = 'La contraseña debe tener mínimo 8 caracteres.';
-    }
+    if (!form.password) newErrors.password = 'La contraseña es obligatoria.';
+    else if (form.password.length < 8)
+      newErrors.password = 'Debe tener mínimo 8 caracteres.';
 
-    // RUT (obligatorio, formato + DV válido)
     const rutTrim = form.rut.trim();
-    if (!rutTrim) {
-      newErrors.rut = 'El RUT es obligatorio.';
-    } else if (!RUT_FORMAT_RE.test(rutTrim)) {
-      newErrors.rut = 'Formato de RUT inválido. Usa 12.345.678-5.';
-    } else if (!isValidRut(rutTrim)) {
+    if (!rutTrim) newErrors.rut = 'El RUT es obligatorio.';
+    else if (!RUT_FORMAT_RE.test(rutTrim))
+      newErrors.rut = 'Formato de RUT inválido (12.345.678-5).';
+    else if (!isValidRut(rutTrim))
       newErrors.rut = 'El RUT ingresado no es válido.';
-    }
 
-    // Región y comuna
-    if (!form.region) {
-      newErrors.region = 'Selecciona una región.';
-    }
-    if (!form.comuna) {
-      newErrors.comuna = 'Selecciona una comuna.';
-    }
+    if (!form.region) newErrors.region = 'Selecciona una región.';
+    if (!form.comuna) newErrors.comuna = 'Selecciona una comuna.';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Muestra "I - Tarapacá", "RM - Región Metropolitana", etc.
   const regionLabel = (r) => `${r.code} - ${r.name}`;
-  // value estable
   const regionValue = (r) => `${r.code}|${r.name}`;
 
   useEffect(() => {
@@ -189,31 +121,18 @@ export default function Registro() {
         const normalizado = data.map(r => ({
           code: r.prefix === 'RM' ? 'RM' : r.prefix,
           name: r.region,
-          comunas: [...r.communes].sort((a, b) =>
-            a.localeCompare(b, 'es', { sensitivity: 'base' })
-          )
+          comunas: [...r.communes].sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }))
         }));
 
-        // Reemplazamos la RM por nuestra lista completa y ordenada
         const idxRM = normalizado.findIndex(r => r.code === 'RM');
-        if (idxRM !== -1) {
-          normalizado[idxRM].comunas = RM_COMUNAS;
-        }
+        if (idxRM !== -1) normalizado[idxRM].comunas = RM_COMUNAS;
 
-        // Orden por código oficial
-        normalizado.sort(
-          (a, b) => REGION_ORDER.indexOf(a.code) - REGION_ORDER.indexOf(b.code)
-        );
+        normalizado.sort((a, b) => REGION_ORDER.indexOf(a.code) - REGION_ORDER.indexOf(b.code));
 
         setRegiones(normalizado);
       } catch (e) {
-        // Fallback mínimo pero con RM completa
         setRegiones([
-          {
-            code: 'RM',
-            name: 'Región Metropolitana de Santiago',
-            comunas: RM_COMUNAS
-          }
+          { code: 'RM', name: 'Región Metropolitana de Santiago', comunas: RM_COMUNAS }
         ]);
       }
     })();
@@ -221,6 +140,7 @@ export default function Registro() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setForm(prev => {
       const next = { ...prev, [name]: value };
 
@@ -233,7 +153,6 @@ export default function Registro() {
       return next;
     });
 
-    // Al escribir, limpiamos el error de ese campo
     setErrors(prev => ({ ...prev, [name]: undefined }));
   };
 
@@ -241,8 +160,7 @@ export default function Registro() {
     e.preventDefault();
     setError(null);
 
-    const isValid = validateForm();
-    if (!isValid) return;
+    if (!validateForm()) return;
 
     try {
       await register(
@@ -262,8 +180,8 @@ export default function Registro() {
   return (
     <>
       <style>{`
-        body.mv-auth-page header:not(.lf-auth-header) { 
-          display: none !important; 
+        body.mv-auth-page header:not(.lf-auth-header) {
+          display: none !important;
         }
       `}</style>
 
@@ -276,19 +194,20 @@ export default function Registro() {
 
       <div className="mv-card mt-4">
         <h2>Crea tu cuenta</h2>
+
         <div className="mv-tabs">
           <Link to="/login" className="mv-tab">Iniciar sesión</Link>
           <Link to="/registro" className="mv-tab mv-active">Registrarse</Link>
         </div>
 
-        {error && <div className="alert alert-danger" role="alert">{error}</div>}
+        {error && <div className="alert alert-danger">{error}</div>}
 
         <form onSubmit={handleSubmit} noValidate>
+
           {/* Nombre */}
           <div className="mb-3">
             <input
               type="text"
-              id="name"
               name="name"
               className={`form-control mv-input ${errors.name ? 'is-invalid' : ''}`}
               placeholder="Nombre y Apellido"
@@ -302,7 +221,6 @@ export default function Registro() {
           <div className="mb-3">
             <input
               type="email"
-              id="email"
               name="email"
               className={`form-control mv-input ${errors.email ? 'is-invalid' : ''}`}
               placeholder="correo@ejemplo.cl"
@@ -312,11 +230,22 @@ export default function Registro() {
             {errors.email && <div className="invalid-feedback">{errors.email}</div>}
           </div>
 
-          {/* Password */}
-          <div className="mb-3">
+          {/* CONTRASEÑA CON OJO 👁️ */}
+          <div className="mb-3 password-container">
+            <div className="label-row">
+              <span>Contraseña</span>
+              <button
+                type="button"
+                className="eye-btn"
+                onClick={() => setShowPassword(prev => !prev)}
+              >
+                <i className={`bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'}`}></i>
+                {showPassword ? ' Ocultar contraseña' : ' Mostrar contraseña'}
+              </button>
+            </div>
+
             <input
-              type="password"
-              id="password"
+              type={showPassword ? 'text' : 'password'}
               name="password"
               className={`form-control mv-input ${errors.password ? 'is-invalid' : ''}`}
               placeholder="Mínimo 8 caracteres"
@@ -330,7 +259,6 @@ export default function Registro() {
           <div className="mb-3">
             <input
               type="text"
-              id="rut"
               name="rut"
               className={`form-control mv-input ${errors.rut ? 'is-invalid' : ''}`}
               placeholder="12.345.678-5"
@@ -341,11 +269,10 @@ export default function Registro() {
             <small className="text-muted">Rut con dígito verificador</small>
           </div>
 
-          {/* Región / Comuna */}
+          {/* Región + Comuna */}
           <div className="row g-3">
-            <div className="col-6 mb-3">
+            <div className="col-6">
               <select
-                id="region"
                 name="region"
                 className={`form-select mv-input ${errors.region ? 'is-invalid' : ''}`}
                 value={form.region}
@@ -361,9 +288,8 @@ export default function Registro() {
               {errors.region && <div className="invalid-feedback d-block">{errors.region}</div>}
             </div>
 
-            <div className="col-6 mb-3">
+            <div className="col-6">
               <select
-                id="comuna"
                 name="comuna"
                 className={`form-select mv-input ${errors.comuna ? 'is-invalid' : ''}`}
                 value={form.comuna}
@@ -371,7 +297,7 @@ export default function Registro() {
                 disabled={!form.region}
               >
                 <option value="">{form.region ? 'Selecciona una comuna' : 'Selecciona una región primero'}</option>
-                {comunas.map((c) => (
+                {comunas.map(c => (
                   <option key={c} value={c}>{c}</option>
                 ))}
               </select>
@@ -379,7 +305,7 @@ export default function Registro() {
             </div>
           </div>
 
-          <button type="submit" className="mv-btn mb-2">Registrarse</button>
+          <button type="submit" className="mv-btn mt-3">Registrarse</button>
         </form>
 
         <p className="mv-hint mt-2">
