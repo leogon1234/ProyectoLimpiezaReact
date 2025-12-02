@@ -60,7 +60,7 @@ export default function Contacto() {
     }
 
     try {
-      await api.post("/contacto", form);
+      await api.post("/api/contacto", form);
       setSubmitted(true);
       setForm({ nombre: "", email: "", asunto: "", mensaje: "" });
       setErrors({});
