@@ -7,6 +7,7 @@ export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    // Recuperamos el usuario de la sesión anterior si existe
     const saved = localStorage.getItem("user");
     if (saved) {
       try {
@@ -21,22 +22,28 @@ export function UserProvider({ children }) {
   const login = async (email, password) => {
     try {
       const res = await api.post("/api/auth/login", { email, password });
-      const backendUser = res.data;
+      
+      // --- CAMBIO CLAVE: RECIBIR TOKEN Y ESTADO DE ADMIN ---
+      // Ahora el backend responde: { "token": "...", "admin": true/false }
+      const { token, admin } = res.data; 
+      
+      // Guardamos el token para las peticiones
+      localStorage.setItem("token", token);
 
+      // Creamos el objeto usuario con el dato REAL de si es admin
       const mappedUser = {
-        id: backendUser.id,
-        nombre: backendUser.nombre,
-        email: backendUser.email,
-        rut: backendUser.rut,
-        region: backendUser.region,
-        comuna: backendUser.comuna,
-        rol: backendUser.rol?.nombreRol,
-        isAdmin: backendUser.rol?.nombreRol === "ADMIN",
+        email: email,
+        isAdmin: admin, // <--- AQUI ASIGNAMOS EL VALOR QUE VIENE DE LA BASE DE DATOS
       };
 
       setUser(mappedUser);
+      
+      // Guardamos el usuario (con su permiso de admin) en el navegador
+      // para que no se pierda al recargar la página
       localStorage.setItem("user", JSON.stringify(mappedUser));
+      
       return mappedUser;
+
     } catch (error) {
       console.error("Error en login", error);
       const msg =
@@ -71,13 +78,16 @@ export function UserProvider({ children }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
+
   return (
     <UserContext.Provider value={{ user, login, register, logout }}>
       {children}
     </UserContext.Provider>
   );
 }
+
 export function useUser() {
   return useContext(UserContext);
 }
