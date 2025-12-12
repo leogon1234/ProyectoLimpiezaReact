@@ -2,23 +2,66 @@
 import React, { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext.jsx";
 import { useNavigate } from "react-router-dom";
-import { products as siteProducts } from "../data/products.js";
-import { Categorias } from "../data/categorias.js";
 import api from "../api/api.js";
+import { Categorias } from "../data/categorias.js";
 
 export default function Admin() {
   const { user, logout } = useUser();
   const navigate = useNavigate();
 
-  /*
+
   useEffect(() => {
     if (!user || !user.isAdmin) navigate("/");
   }, [user, navigate]);
-  */
 
   const DEFAULT_IVA = 19;
 
-  // Productos backend
+
+  const [usuarios, setUsuarios] = useState([]);
+  const [rolFiltro, setRolFiltro] = useState("TODOS");
+  const [loadingUsuarios, setLoadingUsuarios] = useState(true);
+
+  const cargarUsuarios = async () => {
+    setLoadingUsuarios(true);
+    try {
+      const r = await api.get("/api/usuarios");
+      setUsuarios(r.data || []);
+    } catch (e) {
+      console.error("Error cargando usuarios", e);
+      alert("No se pudieron cargar los usuarios.");
+    } finally {
+      setLoadingUsuarios(false);
+    }
+  };
+
+  useEffect(() => {
+    cargarUsuarios();
+  }, []);
+
+  const usuariosFiltrados = usuarios.filter((u) => {
+    if (rolFiltro === "TODOS") return true;
+    return u.rol?.nombreRol === rolFiltro;
+  });
+
+  const eliminarUsuario = async (id) => {
+    const u = usuarios.find((x) => x.id === id);
+    const emailActual = user?.email;
+    if (emailActual && u?.email && u.email === emailActual) {
+      return alert("No puedes eliminar tu propio usuario.");
+    }
+    if (!window.confirm("¿Eliminar este usuario?")) return;
+    try {
+      await api.delete(`/api/usuarios/${id}`);
+      setUsuarios((prev) => prev.filter((u) => u.id !== id));
+    } catch (e) {
+      console.error("Error eliminando usuario", e);
+      alert("No se pudo eliminar el usuario.");
+    }
+  };
+
+
+
+  // PRODUCTOS (backend)
   const [products, setProducts] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [form, setForm] = useState({
@@ -73,8 +116,17 @@ export default function Admin() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { nombre, desc, precio, iva, stock, oferta, precioOferta, categoria, img } =
-      form;
+    const {
+      nombre,
+      desc,
+      precio,
+      iva,
+      stock,
+      oferta,
+      precioOferta,
+      categoria,
+      img,
+    } = form;
 
     if (!nombre.trim()) return alert("Ingresa el nombre del producto.");
     if (toInt(precio) <= 0) return alert("Precio inválido.");
@@ -152,13 +204,13 @@ export default function Admin() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Blogs backend
+  // BLOGS (backend)
   const [blogs, setBlogs] = useState([]);
   const [blogEditingIndex, setBlogEditingIndex] = useState(null);
   const [blogForm, setBlogForm] = useState({
     titulo: "",
     contenido: "",
-    imagenUrl: "",       
+    imagenUrl: "",
   });
 
   const handleBlogChange = (e) => {
@@ -190,7 +242,7 @@ export default function Admin() {
     const payload = {
       titulo: titulo.trim(),
       contenido: contenido.trim(),
-      imagenUrl: imagenUrl?.trim() || null,   // 🔹 se envía la URL (puede ser null)
+      imagenUrl: imagenUrl?.trim() || null,
     };
 
     try {
@@ -223,7 +275,7 @@ export default function Admin() {
     setBlogForm({
       titulo: b.titulo || "",
       contenido: b.contenido || "",
-      imagenUrl: b.imagenUrl || "",   // 🔹 cargamos la url existente
+      imagenUrl: b.imagenUrl || "",
     });
     setBlogEditingIndex(i);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -243,7 +295,8 @@ export default function Admin() {
     }
   };
 
-  // Contacto backend
+
+  // CONTACTO (backend)
   const [contactos, setContactos] = useState([]);
 
   useEffect(() => {
@@ -267,16 +320,14 @@ export default function Admin() {
     }
   };
 
-  const [catFilter, setCatFilter] = useState("Todas");
-  const [q, setQ] = useState("");
-  const categorias = ["Todas", ...Array.from(new Set(siteProducts.map((p) => p.categoria)))];
-  const filteredSite = siteProducts.filter((p) => {
-    const byCat = catFilter === "Todas" || p.categoria === catFilter;
-    const byText = !q || String(p.nombre).toLowerCase().includes(q.toLowerCase());
-    return byCat && byText;
-  });
+  //Boletas Backend
+  const [boletas, setBoletas] = useState([]);
 
-  const noop = (e) => e.preventDefault();
+  useEffect(() => {
+    api.get("/api/boletas")
+      .then(r => setBoletas(r.data || []))
+      .catch(e => console.error("Error cargando boletas", e));
+  }, []);
 
   return (
     <div className="admin-layout d-flex">
@@ -301,6 +352,13 @@ export default function Admin() {
               Contactos
             </a>
           </li>
+          <li className="nav-item">
+            <a className="nav-link text-white" href="#usuarios">
+              <i className="bi bi-people me-2" />
+              Usuarios
+            </a>
+          </li>
+
           <li className="nav-item mt-3">
             <button onClick={logout} className="btn btn-light w-100">
               <i className="bi bi-box-arrow-right me-2" />
@@ -318,7 +376,7 @@ export default function Admin() {
           </span>
         </div>
 
-        {/* Productos */}
+
         <section
           id="productos"
           className="admin-box p-4 mb-5 text-black border border-dark rounded"
@@ -404,9 +462,7 @@ export default function Admin() {
                 />
                 {form.img && (
                   <div className="mt-2">
-                    <span className="small text-muted d-block">
-                      Vista previa:
-                    </span>
+                    <span className="small text-muted d-block">Vista previa:</span>
                     <img
                       src={form.img}
                       alt="Vista previa producto"
@@ -537,10 +593,7 @@ export default function Admin() {
         </section>
 
         {/* BLOGS */}
-        <section
-          id="blogs"
-          className="admin-box p-4 mb-5 form-control border-dark"
-        >
+        <section id="blogs" className="admin-box p-4 mb-5 form-control border-dark">
           <h3 className="mb-4">
             <i className="bi bi-journal-text me-2" />
             Administrar Blogs
@@ -571,9 +624,7 @@ export default function Admin() {
                 />
                 {blogForm.imagenUrl && (
                   <div className="mt-2">
-                    <span className="small text-muted d-block">
-                      Vista previa:
-                    </span>
+                    <span className="small text-muted d-block">Vista previa:</span>
                     <img
                       src={blogForm.imagenUrl}
                       alt="Vista previa blog"
@@ -604,7 +655,8 @@ export default function Admin() {
               >
                 Limpiar
               </button>
-              <button type="submit" className="btn btn.success btn-success">
+
+              <button type="submit" className="btn btn-success">
                 {blogEditingIndex === null ? "Guardar Blog" : "Actualizar Blog"}
               </button>
             </div>
@@ -656,10 +708,7 @@ export default function Admin() {
         </section>
 
         {/* CONTACTO */}
-        <section
-          id="contactos"
-          className="admin-box p-4 mb-5 form-control border-dark"
-        >
+        <section id="contactos" className="admin-box p-4 mb-5 form-control border-dark">
           <h3 className="mb-3">
             <i className="bi bi-envelope-paper-heart me-2" />
             Mensajes de contacto
@@ -684,9 +733,7 @@ export default function Admin() {
                       <td>{c.nombre}</td>
                       <td>{c.email}</td>
                       <td>{c.asunto}</td>
-                      <td
-                        style={{ maxWidth: "300px", whiteSpace: "pre-wrap" }}
-                      >
+                      <td style={{ maxWidth: "300px", whiteSpace: "pre-wrap" }}>
                         {c.mensaje}
                       </td>
                       <td>
@@ -697,6 +744,118 @@ export default function Admin() {
                           Eliminar
                         </button>
                       </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+        <section id="usuarios" className="admin-box p-4 mb-5 form-control border-dark">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h3>
+              <i className="bi bi-people me-2" />
+              Usuarios registrados
+            </h3>
+
+            <div className="d-flex gap-2 align-items-center">
+              <select
+                className="form-select w-auto"
+                value={rolFiltro}
+                onChange={(e) => setRolFiltro(e.target.value)}
+              >
+                <option value="TODOS">Todos</option>
+                <option value="ADMIN">ADMIN</option>
+                <option value="CLIENTE">CLIENTE</option>
+              </select>
+
+              <button className="btn btn-outline-primary btn-sm" onClick={cargarUsuarios}>
+                Recargar
+              </button>
+            </div>
+          </div>
+
+          {loadingUsuarios ? (
+            <p className="text-muted">Cargando usuarios...</p>
+          ) : usuariosFiltrados.length === 0 ? (
+            <p className="text-muted">No hay usuarios para mostrar.</p>
+          ) : (
+            <div className="table-responsive">
+              <table className="table table-hover align-middle">
+                <thead className="table-primary">
+                  <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Región</th>
+                    <th>Comuna</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {usuariosFiltrados.map((u) => (
+                    <tr key={u.id}>
+                      <td>{u.id}</td>
+                      <td>{u.nombre || "-"}</td>
+                      <td>{u.email || "-"}</td>
+                      <td>{u.region || "-"}</td>
+                      <td>{u.comuna || "-"}</td>
+                      <td>
+                        <span
+                          className={`badge ${u.rol?.nombreRol === "ADMIN" ? "bg-danger" : "bg-secondary"
+                            }`}
+                        >
+                          {u.rol?.nombreRol}
+                        </span>
+                      </td>
+                      <td>
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() => eliminarUsuario(u.id)}
+                        >
+                          Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+        <section id="boletas" className="admin-box p-4 mb-5 form-control border-dark">
+          <h3 className="mb-3">
+            <i className="bi bi-receipt me-2" />
+            Boletas
+          </h3>
+
+          {boletas.length === 0 ? (
+            <p className="text-muted">No hay boletas registradas.</p>
+          ) : (
+            <div className="table-responsive">
+              <table className="table table-hover align-middle">
+                <thead className="table-primary">
+                  <tr>
+                    <th>ID</th>
+                    <th>Número</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Ciudad</th>
+                    <th>Total</th>
+                    <th>Items</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {boletas.map((b) => (
+                    <tr key={b.id}>
+                      <td>{b.id}</td>
+                      <td>{b.numeroBoleta}</td>
+                      <td>{b.fechaBoleta ? new Date(b.fechaBoleta).toLocaleString() : "-"}</td>
+                      <td>{b.nombreCliente}</td>
+                      <td>{b.ciudad}</td>
+                      <td>${(b.total ?? 0).toLocaleString("es-CL")}</td>
+                      <td>{(b.items || []).length}</td>
                     </tr>
                   ))}
                 </tbody>
