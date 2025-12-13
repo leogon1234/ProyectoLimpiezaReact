@@ -18,41 +18,30 @@ export function UserProvider({ children }) {
     }
   }, []);
 
-  // ---------- LOGIN ----------
   const login = async (email, password) => {
     try {
       const res = await api.post("/api/auth/login", { email, password });
-      
-      // --- CAMBIO CLAVE: RECIBIR TOKEN Y ESTADO DE ADMIN ---
-      // Ahora el backend responde: { "token": "...", "admin": true/false }
-      const { token, admin } = res.data; 
-      
-      // Guardamos el token para las peticiones
-      localStorage.setItem("token", token);
-
-      // Creamos el objeto usuario con el dato REAL de si es admin
+      const rol =
+        res.data?.rol?.nombreRol || res.data?.rol || res.data?.role || res.data?.isAdmin;
+      const isAdmin =
+        rol === true || String(rol).toUpperCase() === "ADMIN";
       const mappedUser = {
-        email: email,
-        isAdmin: admin, // <--- AQUI ASIGNAMOS EL VALOR QUE VIENE DE LA BASE DE DATOS
+        id: res.data?.usuarioId ?? res.data?.id ?? null,
+        name: res.data?.nombre ?? res.data?.name ?? email,
+        email,
+        isAdmin,
+        rol: String(rol || "").toUpperCase(),
       };
 
       setUser(mappedUser);
-      
-      // Guardamos el usuario (con su permiso de admin) en el navegador
-      // para que no se pierda al recargar la página
       localStorage.setItem("user", JSON.stringify(mappedUser));
-      
-      return mappedUser;
 
+      return mappedUser;
     } catch (error) {
       console.error("Error en login", error);
-      const msg =
-        error.response?.data ||
-        "No se pudo iniciar sesión. Verifica tu correo y contraseña.";
-      throw new Error(typeof msg === "string" ? msg : "Error en login");
+      throw new Error(error.response?.data || "Error en login");
     }
   };
-
   // ---------- REGISTRO ----------
   const register = async (name, email, password, rut, region, comuna) => {
     try {
@@ -78,7 +67,6 @@ export function UserProvider({ children }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
-    localStorage.removeItem("token");
   };
 
   return (
