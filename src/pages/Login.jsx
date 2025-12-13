@@ -44,16 +44,12 @@ export default function Login() {
           display: none !important; 
         }
       `}</style>
-
-      {/* Compact header with large logo centered */}
       <header className="lf-auth-header">
         <Link to="/" className="lf-auth-brand">
           <img src="/img/logo.jpg" alt="Logo LimpiFresh" className="lf-auth-logo" />
           <span className="lf-auth-title">LimpiFresh</span>
         </Link>
       </header>
-
-      {/* Card container for the auth form */}
       <div className="mv-card mt-4">
         <h2>Bienvenido a LimpiFresh</h2>
         <div className="mv-tabs">
