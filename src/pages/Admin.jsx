@@ -1,7 +1,7 @@
 // src/pages/Admin.jsx
 import React, { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext.jsx";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../api/api.js";
 import { Categorias } from "../data/categorias.js";
 
@@ -319,7 +319,7 @@ export default function Admin() {
     }
   };
 
-// CONTACTO (backend)
+  // CONTACTO (backend)
 
   const [contactos, setContactos] = useState([]);
 
@@ -344,16 +344,25 @@ export default function Admin() {
     }
   };
 
-  // =========================
   // BOLETAS (backend)
-  // =========================
   const [boletas, setBoletas] = useState([]);
+  const [loadingBoletas, setLoadingBoletas] = useState(true);
+
+  const cargarBoletas = async () => {
+    setLoadingBoletas(true);
+    try {
+      const r = await api.get("/api/boletas");
+      setBoletas(r.data || []);
+    } catch (e) {
+      console.error("Error cargando boletas", e);
+      alert("No se pudieron cargar las boletas.");
+    } finally {
+      setLoadingBoletas(false);
+    }
+  };
 
   useEffect(() => {
-    api
-      .get("/api/boletas")
-      .then((r) => setBoletas(r.data || []))
-      .catch((e) => console.error("Error cargando boletas", e));
+    cargarBoletas();
   }, []);
   return (
     <div className="admin-layout d-flex">
@@ -392,10 +401,10 @@ export default function Admin() {
           </li>
 
           <li className="nav-item mt-3">
-            <button onClick={logout} className="btn btn-light w-100">
+            <Link to="/" className="btn btn-light w-100">
               <i className="bi bi-box-arrow-right me-2" />
-              Salir
-            </button>
+              Pagina Principal
+            </Link>
           </li>
         </ul>
       </aside>
@@ -850,11 +859,10 @@ export default function Admin() {
                       <td>{u.comuna || "-"}</td>
                       <td>
                         <span
-                          className={`badge ${
-                            u.rol?.nombreRol === "ADMIN"
-                              ? "bg-danger"
-                              : "bg-secondary"
-                          }`}
+                          className={`badge ${u.rol?.nombreRol === "ADMIN"
+                            ? "bg-danger"
+                            : "bg-secondary"
+                            }`}
                         >
                           {u.rol?.nombreRol}
                         </span>
@@ -875,12 +883,20 @@ export default function Admin() {
           )}
         </section>
         <section id="boletas" className="admin-box p-4 mb-5 form-control border-dark">
-          <h3 className="mb-3">
-            <i className="bi bi-receipt me-2" />
-            Boletas
-          </h3>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h3 className="mb-0">
+              <i className="bi bi-receipt me-2" />
+              Boletas
+            </h3>
 
-          {boletas.length === 0 ? (
+            <button className="btn btn-outline-primary btn-sm" onClick={cargarBoletas}>
+              Recargar
+            </button>
+          </div>
+
+          {loadingBoletas ? (
+            <p className="text-muted">Cargando boletas...</p>
+          ) : boletas.length === 0 ? (
             <p className="text-muted">No hay boletas registradas.</p>
           ) : (
             <div className="table-responsive">
@@ -897,17 +913,23 @@ export default function Admin() {
                   </tr>
                 </thead>
                 <tbody>
-                  {boletas.map((b) => (
-                    <tr key={b.id}>
-                      <td>{b.id}</td>
-                      <td>{b.numeroBoleta}</td>
-                      <td>{b.fechaBoleta? new Date(b.fechaBoleta).toLocaleString(): "-"}</td>
-                      <td>{b.nombreCliente}</td>
-                      <td>{b.ciudad}</td>
-                      <td>${(b.total ?? 0).toLocaleString("es-CL")}</td>
-                      <td>{(b.items || []).length}</td>
-                    </tr>
-                  ))}
+                  {boletas.map((b) => {
+                    const id = b.id ?? b.numeroBoleta ?? Math.random();
+                    const fecha = b.fechaBoleta || b.fecha || null;
+                    const items = b.items || b.detalle || b.itemsBoleta || [];
+
+                    return (
+                      <tr key={id}>
+                        <td>{b.id ?? "-"}</td>
+                        <td>{b.numeroBoleta ?? "-"}</td>
+                        <td>{fecha ? new Date(fecha).toLocaleString("es-CL") : "-"}</td>
+                        <td>{b.nombreCliente ?? "-"}</td>
+                        <td>{b.ciudad ?? "-"}</td>
+                        <td>${Number(b.total ?? 0).toLocaleString("es-CL")}</td>
+                        <td>{items.length}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
