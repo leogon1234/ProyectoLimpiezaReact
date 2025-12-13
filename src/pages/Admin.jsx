@@ -1,24 +1,67 @@
 // src/pages/Admin.jsx
 import React, { useState, useEffect } from "react";
 import { useUser } from "../contexts/UserContext.jsx";
-import { useNavigate } from "react-router-dom";
-import { products as siteProducts } from "../data/products.js";
-import { Categorias } from "../data/categorias.js";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../api/api.js";
+import { Categorias } from "../data/categorias.js";
 
 export default function Admin() {
   const { user, logout } = useUser();
   const navigate = useNavigate();
 
-  /*
   useEffect(() => {
     if (!user || !user.isAdmin) navigate("/");
   }, [user, navigate]);
-  */
 
   const DEFAULT_IVA = 19;
 
-  // Productos backend
+  // USUARIOS
+  const [usuarios, setUsuarios] = useState([]);
+  const [rolFiltro, setRolFiltro] = useState("TODOS");
+  const [loadingUsuarios, setLoadingUsuarios] = useState(true);
+
+  const cargarUsuarios = async () => {
+    setLoadingUsuarios(true);
+    try {
+      const r = await api.get("/api/usuarios");
+      setUsuarios(r.data || []);
+    } catch (e) {
+      console.error("Error cargando usuarios", e);
+      alert("No se pudieron cargar los usuarios.");
+    } finally {
+      setLoadingUsuarios(false);
+    }
+  };
+
+  useEffect(() => {
+    cargarUsuarios();
+  }, []);
+
+  const usuariosFiltrados = usuarios.filter((u) => {
+    if (rolFiltro === "TODOS") return true;
+    return u.rol?.nombreRol === rolFiltro;
+  });
+
+  const eliminarUsuario = async (id) => {
+    const u = usuarios.find((x) => x.id === id);
+    const emailActual = user?.email;
+    if (emailActual && u?.email && u.email === emailActual) {
+      return alert("No puedes eliminar tu propio usuario.");
+    }
+    if (!window.confirm("¿Eliminar este usuario?")) return;
+    try {
+      await api.delete(`/api/usuarios/${id}`);
+      setUsuarios((prev) => prev.filter((u) => u.id !== id));
+    } catch (e) {
+      console.error("Error eliminando usuario", e);
+      alert("No se pudo eliminar el usuario.");
+    }
+  };
+
+  // PRODUCTOS (backend)
+  const [imgFile, setImgFile] = useState(null);
+  const [imgPreview, setImgPreview] = useState("");
+
   const [products, setProducts] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [form, setForm] = useState({
@@ -59,6 +102,8 @@ export default function Admin() {
       img: "",
     });
     setEditingIndex(null);
+    setImgFile(null);
+    setImgPreview("");
   };
 
   useEffect(() => {
@@ -70,11 +115,28 @@ export default function Admin() {
         alert("No se pudieron cargar los productos desde el servidor.");
       });
   }, []);
+  const uploadImage = async (file) => {
+    const fd = new FormData();
+    fd.append("file", file);
+    const r = await api.post("/api/upload", fd, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return r.data.url;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { nombre, desc, precio, iva, stock, oferta, precioOferta, categoria, img } =
-      form;
+    const {
+      nombre,
+      desc,
+      precio,
+      iva,
+      stock,
+      oferta,
+      precioOferta,
+      categoria,
+      img,
+    } = form;
 
     if (!nombre.trim()) return alert("Ingresa el nombre del producto.");
     if (toInt(precio) <= 0) return alert("Precio inválido.");
@@ -83,7 +145,17 @@ export default function Admin() {
       return alert(
         "Si el producto está en oferta, debes ingresar un precio de oferta válido."
       );
-
+    let imgUrlFinal = img?.trim() || null;
+    if (imgFile) {
+      try {
+        const urlRelativa = await uploadImage(imgFile); // "/uploads/xxx.jpg"
+        const base = api?.defaults?.baseURL || "";
+        imgUrlFinal = `${base}${urlRelativa}`;
+      } catch (err) {
+        console.error("Error subiendo imagen", err);
+        return alert("No se pudo subir la imagen. Intenta otra vez.");
+      }
+    }
     const payload = {
       nombre: nombre.trim(),
       descripcionCorta: desc.trim(),
@@ -94,7 +166,7 @@ export default function Admin() {
       oferta,
       precioOferta: oferta ? toInt(precioOferta) : null,
       categoria: categoria || "General",
-      img: img?.trim() || null,
+      img: imgUrlFinal,
     };
 
     try {
@@ -149,16 +221,20 @@ export default function Admin() {
       img: p.img || "",
     });
     setEditingIndex(i);
+    setImgFile(null);
+    setImgPreview("");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Blogs backend
+  // =========================
+  // BLOGS (backend)
+  // =========================
   const [blogs, setBlogs] = useState([]);
   const [blogEditingIndex, setBlogEditingIndex] = useState(null);
   const [blogForm, setBlogForm] = useState({
     titulo: "",
     contenido: "",
-    imagenUrl: "",       
+    imagenUrl: "",
   });
 
   const handleBlogChange = (e) => {
@@ -190,7 +266,7 @@ export default function Admin() {
     const payload = {
       titulo: titulo.trim(),
       contenido: contenido.trim(),
-      imagenUrl: imagenUrl?.trim() || null,   // 🔹 se envía la URL (puede ser null)
+      imagenUrl: imagenUrl?.trim() || null,
     };
 
     try {
@@ -223,7 +299,7 @@ export default function Admin() {
     setBlogForm({
       titulo: b.titulo || "",
       contenido: b.contenido || "",
-      imagenUrl: b.imagenUrl || "",   // 🔹 cargamos la url existente
+      imagenUrl: b.imagenUrl || "",
     });
     setBlogEditingIndex(i);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -243,7 +319,8 @@ export default function Admin() {
     }
   };
 
-  // Contacto backend
+  // CONTACTO (backend)
+
   const [contactos, setContactos] = useState([]);
 
   useEffect(() => {
@@ -267,17 +344,26 @@ export default function Admin() {
     }
   };
 
-  const [catFilter, setCatFilter] = useState("Todas");
-  const [q, setQ] = useState("");
-  const categorias = ["Todas", ...Array.from(new Set(siteProducts.map((p) => p.categoria)))];
-  const filteredSite = siteProducts.filter((p) => {
-    const byCat = catFilter === "Todas" || p.categoria === catFilter;
-    const byText = !q || String(p.nombre).toLowerCase().includes(q.toLowerCase());
-    return byCat && byText;
-  });
+  // BOLETAS (backend)
+  const [boletas, setBoletas] = useState([]);
+  const [loadingBoletas, setLoadingBoletas] = useState(true);
 
-  const noop = (e) => e.preventDefault();
+  const cargarBoletas = async () => {
+    setLoadingBoletas(true);
+    try {
+      const r = await api.get("/api/boletas");
+      setBoletas(r.data || []);
+    } catch (e) {
+      console.error("Error cargando boletas", e);
+      alert("No se pudieron cargar las boletas.");
+    } finally {
+      setLoadingBoletas(false);
+    }
+  };
 
+  useEffect(() => {
+    cargarBoletas();
+  }, []);
   return (
     <div className="admin-layout d-flex">
       <aside className="sidebar bg-brand text-white p-3">
@@ -301,11 +387,24 @@ export default function Admin() {
               Contactos
             </a>
           </li>
+          <li className="nav-item">
+            <a className="nav-link text-white" href="#usuarios">
+              <i className="bi bi-people me-2" />
+              Usuarios
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link text-white" href="#boletas">
+              <i className="bi bi-receipt me-2" />
+              Boletas
+            </a>
+          </li>
+
           <li className="nav-item mt-3">
-            <button onClick={logout} className="btn btn-light w-100">
+            <Link to="/" className="btn btn-light w-100">
               <i className="bi bi-box-arrow-right me-2" />
-              Salir
-            </button>
+              Pagina Principal
+            </Link>
           </li>
         </ul>
       </aside>
@@ -317,8 +416,6 @@ export default function Admin() {
             Admin: {user?.name || "Administrador"}
           </span>
         </div>
-
-        {/* Productos */}
         <section
           id="productos"
           className="admin-box p-4 mb-5 text-black border border-dark rounded"
@@ -393,25 +490,37 @@ export default function Admin() {
                 </select>
               </div>
               <div className="col-md-12">
-                <label className="form-label">Imagen del producto (URL)</label>
+                <label className="form-label">Imagen del producto (archivo)</label>
                 <input
-                  name="img"
-                  type="url"
+                  type="file"
+                  accept="image/*"
                   className="form-control border-dark"
-                  value={form.img}
-                  onChange={handleChange}
-                  placeholder="https://tuservidor.com/img/producto.jpg"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    setImgFile(file || null);
+                    setImgPreview(file ? URL.createObjectURL(file) : "");
+                  }}
                 />
-                {form.img && (
+                {!imgPreview && form.img && (
                   <div className="mt-2">
-                    <span className="small text-muted d-block">
-                      Vista previa:
-                    </span>
+                    <span className="small text-muted d-block">Imagen actual:</span>
                     <img
                       src={form.img}
-                      alt="Vista previa producto"
+                      alt="Actual"
                       className="preview-img-admin"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.style.display = "none";
+                      }}
                     />
+                  </div>
+                )}
+                {imgPreview && (
+                  <div className="mt-2">
+                    <span className="small text-muted d-block">
+                      Nueva imagen seleccionada:
+                    </span>
+                    <img src={imgPreview} alt="Preview" className="preview-img-admin" />
                   </div>
                 )}
               </div>
@@ -472,8 +581,6 @@ export default function Admin() {
             </div>
           </form>
         </section>
-
-        {/* TABLA PRODUCTOS */}
         <section className="admin-box p-4 mb-5 text-black form-control border-dark">
           <h3 className="mb-3">
             <i className="bi bi-box2-heart me-2" />
@@ -535,12 +642,7 @@ export default function Admin() {
             </table>
           </div>
         </section>
-
-        {/* BLOGS */}
-        <section
-          id="blogs"
-          className="admin-box p-4 mb-5 form-control border-dark"
-        >
+        <section id="blogs" className="admin-box p-4 mb-5 form-control border-dark">
           <h3 className="mb-4">
             <i className="bi bi-journal-text me-2" />
             Administrar Blogs
@@ -571,9 +673,7 @@ export default function Admin() {
                 />
                 {blogForm.imagenUrl && (
                   <div className="mt-2">
-                    <span className="small text-muted d-block">
-                      Vista previa:
-                    </span>
+                    <span className="small text-muted d-block">Vista previa:</span>
                     <img
                       src={blogForm.imagenUrl}
                       alt="Vista previa blog"
@@ -604,7 +704,8 @@ export default function Admin() {
               >
                 Limpiar
               </button>
-              <button type="submit" className="btn btn.success btn-success">
+
+              <button type="submit" className="btn btn-success">
                 {blogEditingIndex === null ? "Guardar Blog" : "Actualizar Blog"}
               </button>
             </div>
@@ -654,8 +755,6 @@ export default function Admin() {
             </div>
           )}
         </section>
-
-        {/* CONTACTO */}
         <section
           id="contactos"
           className="admin-box p-4 mb-5 form-control border-dark"
@@ -684,9 +783,7 @@ export default function Admin() {
                       <td>{c.nombre}</td>
                       <td>{c.email}</td>
                       <td>{c.asunto}</td>
-                      <td
-                        style={{ maxWidth: "300px", whiteSpace: "pre-wrap" }}
-                      >
+                      <td style={{ maxWidth: "300px", whiteSpace: "pre-wrap" }}>
                         {c.mensaje}
                       </td>
                       <td>
@@ -699,6 +796,140 @@ export default function Admin() {
                       </td>
                     </tr>
                   ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+        <section
+          id="usuarios"
+          className="admin-box p-4 mb-5 form-control border-dark"
+        >
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h3>
+              <i className="bi bi-people me-2" />
+              Usuarios registrados
+            </h3>
+
+            <div className="d-flex gap-2 align-items-center">
+              <select
+                className="form-select w-auto"
+                value={rolFiltro}
+                onChange={(e) => setRolFiltro(e.target.value)}
+              >
+                <option value="TODOS">Todos</option>
+                <option value="ADMIN">ADMIN</option>
+                <option value="CLIENTE">CLIENTE</option>
+              </select>
+
+              <button
+                className="btn btn-outline-primary btn-sm"
+                onClick={cargarUsuarios}
+              >
+                Recargar
+              </button>
+            </div>
+          </div>
+
+          {loadingUsuarios ? (
+            <p className="text-muted">Cargando usuarios...</p>
+          ) : usuariosFiltrados.length === 0 ? (
+            <p className="text-muted">No hay usuarios para mostrar.</p>
+          ) : (
+            <div className="table-responsive">
+              <table className="table table-hover align-middle">
+                <thead className="table-primary">
+                  <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Región</th>
+                    <th>Comuna</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {usuariosFiltrados.map((u) => (
+                    <tr key={u.id}>
+                      <td>{u.id}</td>
+                      <td>{u.nombre || "-"}</td>
+                      <td>{u.email || "-"}</td>
+                      <td>{u.region || "-"}</td>
+                      <td>{u.comuna || "-"}</td>
+                      <td>
+                        <span
+                          className={`badge ${u.rol?.nombreRol === "ADMIN"
+                            ? "bg-danger"
+                            : "bg-secondary"
+                            }`}
+                        >
+                          {u.rol?.nombreRol}
+                        </span>
+                      </td>
+                      <td>
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() => eliminarUsuario(u.id)}
+                        >
+                          Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+        <section id="boletas" className="admin-box p-4 mb-5 form-control border-dark">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h3 className="mb-0">
+              <i className="bi bi-receipt me-2" />
+              Boletas
+            </h3>
+
+            <button className="btn btn-outline-primary btn-sm" onClick={cargarBoletas}>
+              Recargar
+            </button>
+          </div>
+
+          {loadingBoletas ? (
+            <p className="text-muted">Cargando boletas...</p>
+          ) : boletas.length === 0 ? (
+            <p className="text-muted">No hay boletas registradas.</p>
+          ) : (
+            <div className="table-responsive">
+              <table className="table table-hover align-middle">
+                <thead className="table-primary">
+                  <tr>
+                    <th>ID</th>
+                    <th>Número</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Ciudad</th>
+                    <th>Total</th>
+                    <th>Items</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {boletas.map((b) => {
+                    const id = b.id ?? b.numeroBoleta ?? Math.random();
+                    const fecha = b.fechaBoleta || b.fecha || null;
+                    const items = b.items || b.detalle || b.itemsBoleta || [];
+
+                    return (
+                      <tr key={id}>
+                        <td>{b.id ?? "-"}</td>
+                        <td>{b.numeroBoleta ?? "-"}</td>
+                        <td>{fecha ? new Date(fecha).toLocaleString("es-CL") : "-"}</td>
+                        <td>{b.nombreCliente ?? "-"}</td>
+                        <td>{b.ciudad ?? "-"}</td>
+                        <td>${Number(b.total ?? 0).toLocaleString("es-CL")}</td>
+                        <td>{items.length}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

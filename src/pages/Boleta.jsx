@@ -38,14 +38,18 @@ export default function Boleta() {
             <button className="btn btn-secondary" onClick={() => navigate('/')}>
               Volver al inicio
             </button>
+            <button className="btn btn-success" onClick={handlePrint}>
+              Imprimir ahora
+            </button>
           </div>
 
-          <div className="card shadow-lg border-0" id="invoice">
+
+          <div className="card shadow-lg border-0"  id="invoice"> 
             <div className="card-body p-5">
               <div className="row mb-5">
                 <div className="col-6">
                   <div className="mb-3">
-                    <div className="border rounded p-3 d-inline-block bg-light">
+                    <div className="border rounded p-3 d-inline-block bg-black">
                       <img
                         src="/img/logo.jpg"
                         alt="LimpiFresh Logo"
@@ -126,7 +130,7 @@ export default function Boleta() {
                         </tr>
                       );
                     })}
-                    
+
                     {items.length < 3 && [...Array(3 - items.length)].map((_, i) => (
                       <tr key={`empty-${i}`} className="border-bottom">
                         <td className="py-3 text-muted">
@@ -157,11 +161,11 @@ export default function Boleta() {
                   </div>
                 </div>
               </div>
-              </div>
             </div>
           </div>
         </div>
       </div>
-        );
+    </div>
+  );
 }
 
