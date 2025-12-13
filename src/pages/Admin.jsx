@@ -9,14 +9,13 @@ export default function Admin() {
   const { user, logout } = useUser();
   const navigate = useNavigate();
 
-
   useEffect(() => {
     if (!user || !user.isAdmin) navigate("/");
   }, [user, navigate]);
 
   const DEFAULT_IVA = 19;
 
-
+  // USUARIOS
   const [usuarios, setUsuarios] = useState([]);
   const [rolFiltro, setRolFiltro] = useState("TODOS");
   const [loadingUsuarios, setLoadingUsuarios] = useState(true);
@@ -59,9 +58,10 @@ export default function Admin() {
     }
   };
 
-
-
   // PRODUCTOS (backend)
+  const [imgFile, setImgFile] = useState(null);
+  const [imgPreview, setImgPreview] = useState("");
+
   const [products, setProducts] = useState([]);
   const [editingIndex, setEditingIndex] = useState(null);
   const [form, setForm] = useState({
@@ -102,6 +102,8 @@ export default function Admin() {
       img: "",
     });
     setEditingIndex(null);
+    setImgFile(null);
+    setImgPreview("");
   };
 
   useEffect(() => {
@@ -113,6 +115,14 @@ export default function Admin() {
         alert("No se pudieron cargar los productos desde el servidor.");
       });
   }, []);
+  const uploadImage = async (file) => {
+    const fd = new FormData();
+    fd.append("file", file);
+    const r = await api.post("/api/upload", fd, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return r.data.url;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -135,7 +145,17 @@ export default function Admin() {
       return alert(
         "Si el producto está en oferta, debes ingresar un precio de oferta válido."
       );
-
+    let imgUrlFinal = img?.trim() || null;
+    if (imgFile) {
+      try {
+        const urlRelativa = await uploadImage(imgFile); // "/uploads/xxx.jpg"
+        const base = api?.defaults?.baseURL || "";
+        imgUrlFinal = `${base}${urlRelativa}`;
+      } catch (err) {
+        console.error("Error subiendo imagen", err);
+        return alert("No se pudo subir la imagen. Intenta otra vez.");
+      }
+    }
     const payload = {
       nombre: nombre.trim(),
       descripcionCorta: desc.trim(),
@@ -146,7 +166,7 @@ export default function Admin() {
       oferta,
       precioOferta: oferta ? toInt(precioOferta) : null,
       categoria: categoria || "General",
-      img: img?.trim() || null,
+      img: imgUrlFinal,
     };
 
     try {
@@ -201,10 +221,14 @@ export default function Admin() {
       img: p.img || "",
     });
     setEditingIndex(i);
+    setImgFile(null);
+    setImgPreview("");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // =========================
   // BLOGS (backend)
+  // =========================
   const [blogs, setBlogs] = useState([]);
   const [blogEditingIndex, setBlogEditingIndex] = useState(null);
   const [blogForm, setBlogForm] = useState({
@@ -295,8 +319,8 @@ export default function Admin() {
     }
   };
 
+// CONTACTO (backend)
 
-  // CONTACTO (backend)
   const [contactos, setContactos] = useState([]);
 
   useEffect(() => {
@@ -320,15 +344,17 @@ export default function Admin() {
     }
   };
 
-  //Boletas Backend
+  // =========================
+  // BOLETAS (backend)
+  // =========================
   const [boletas, setBoletas] = useState([]);
 
   useEffect(() => {
-    api.get("/api/boletas")
-      .then(r => setBoletas(r.data || []))
-      .catch(e => console.error("Error cargando boletas", e));
+    api
+      .get("/api/boletas")
+      .then((r) => setBoletas(r.data || []))
+      .catch((e) => console.error("Error cargando boletas", e));
   }, []);
-
   return (
     <div className="admin-layout d-flex">
       <aside className="sidebar bg-brand text-white p-3">
@@ -358,6 +384,12 @@ export default function Admin() {
               Usuarios
             </a>
           </li>
+          <li className="nav-item">
+            <a className="nav-link text-white" href="#boletas">
+              <i className="bi bi-receipt me-2" />
+              Boletas
+            </a>
+          </li>
 
           <li className="nav-item mt-3">
             <button onClick={logout} className="btn btn-light w-100">
@@ -375,8 +407,6 @@ export default function Admin() {
             Admin: {user?.name || "Administrador"}
           </span>
         </div>
-
-
         <section
           id="productos"
           className="admin-box p-4 mb-5 text-black border border-dark rounded"
@@ -451,23 +481,37 @@ export default function Admin() {
                 </select>
               </div>
               <div className="col-md-12">
-                <label className="form-label">Imagen del producto (URL)</label>
+                <label className="form-label">Imagen del producto (archivo)</label>
                 <input
-                  name="img"
-                  type="url"
+                  type="file"
+                  accept="image/*"
                   className="form-control border-dark"
-                  value={form.img}
-                  onChange={handleChange}
-                  placeholder="https://tuservidor.com/img/producto.jpg"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    setImgFile(file || null);
+                    setImgPreview(file ? URL.createObjectURL(file) : "");
+                  }}
                 />
-                {form.img && (
+                {!imgPreview && form.img && (
                   <div className="mt-2">
-                    <span className="small text-muted d-block">Vista previa:</span>
+                    <span className="small text-muted d-block">Imagen actual:</span>
                     <img
                       src={form.img}
-                      alt="Vista previa producto"
+                      alt="Actual"
                       className="preview-img-admin"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.style.display = "none";
+                      }}
                     />
+                  </div>
+                )}
+                {imgPreview && (
+                  <div className="mt-2">
+                    <span className="small text-muted d-block">
+                      Nueva imagen seleccionada:
+                    </span>
+                    <img src={imgPreview} alt="Preview" className="preview-img-admin" />
                   </div>
                 )}
               </div>
@@ -528,8 +572,6 @@ export default function Admin() {
             </div>
           </form>
         </section>
-
-        {/* TABLA PRODUCTOS */}
         <section className="admin-box p-4 mb-5 text-black form-control border-dark">
           <h3 className="mb-3">
             <i className="bi bi-box2-heart me-2" />
@@ -591,8 +633,6 @@ export default function Admin() {
             </table>
           </div>
         </section>
-
-        {/* BLOGS */}
         <section id="blogs" className="admin-box p-4 mb-5 form-control border-dark">
           <h3 className="mb-4">
             <i className="bi bi-journal-text me-2" />
@@ -706,9 +746,10 @@ export default function Admin() {
             </div>
           )}
         </section>
-
-        {/* CONTACTO */}
-        <section id="contactos" className="admin-box p-4 mb-5 form-control border-dark">
+        <section
+          id="contactos"
+          className="admin-box p-4 mb-5 form-control border-dark"
+        >
           <h3 className="mb-3">
             <i className="bi bi-envelope-paper-heart me-2" />
             Mensajes de contacto
@@ -751,7 +792,10 @@ export default function Admin() {
             </div>
           )}
         </section>
-        <section id="usuarios" className="admin-box p-4 mb-5 form-control border-dark">
+        <section
+          id="usuarios"
+          className="admin-box p-4 mb-5 form-control border-dark"
+        >
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h3>
               <i className="bi bi-people me-2" />
@@ -769,7 +813,10 @@ export default function Admin() {
                 <option value="CLIENTE">CLIENTE</option>
               </select>
 
-              <button className="btn btn-outline-primary btn-sm" onClick={cargarUsuarios}>
+              <button
+                className="btn btn-outline-primary btn-sm"
+                onClick={cargarUsuarios}
+              >
                 Recargar
               </button>
             </div>
@@ -803,8 +850,11 @@ export default function Admin() {
                       <td>{u.comuna || "-"}</td>
                       <td>
                         <span
-                          className={`badge ${u.rol?.nombreRol === "ADMIN" ? "bg-danger" : "bg-secondary"
-                            }`}
+                          className={`badge ${
+                            u.rol?.nombreRol === "ADMIN"
+                              ? "bg-danger"
+                              : "bg-secondary"
+                          }`}
                         >
                           {u.rol?.nombreRol}
                         </span>
@@ -851,7 +901,7 @@ export default function Admin() {
                     <tr key={b.id}>
                       <td>{b.id}</td>
                       <td>{b.numeroBoleta}</td>
-                      <td>{b.fechaBoleta ? new Date(b.fechaBoleta).toLocaleString() : "-"}</td>
+                      <td>{b.fechaBoleta? new Date(b.fechaBoleta).toLocaleString(): "-"}</td>
                       <td>{b.nombreCliente}</td>
                       <td>{b.ciudad}</td>
                       <td>${(b.total ?? 0).toLocaleString("es-CL")}</td>

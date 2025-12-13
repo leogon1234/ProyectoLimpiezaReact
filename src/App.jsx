@@ -22,7 +22,7 @@ export default function App() {
     <div className="d-flex flex-column min-vh-100">
       <Header />
         <Routes>
-          <Route path="/" element={<Navigate to="/registro" replace />} />
+          <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/productos" element={<Products />} />
           <Route path="/ofertas" element={<Ofertas />} />
