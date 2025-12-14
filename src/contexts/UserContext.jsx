@@ -7,66 +7,55 @@ export function UserProvider({ children }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Recuperamos el usuario de la sesión anterior si existe
     const saved = localStorage.getItem("user");
     if (saved) {
       try {
         setUser(JSON.parse(saved));
-      } catch (e) {
-        console.error("Error leyendo usuario guardado", e);
+      } catch {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
       }
     }
   }, []);
 
   const login = async (email, password) => {
-    try {
-      const res = await api.post("/api/auth/login", { email, password });
-      const rol =
-        res.data?.rol?.nombreRol || res.data?.rol || res.data?.role || res.data?.isAdmin;
-      const isAdmin =
-        rol === true || String(rol).toUpperCase() === "ADMIN";
-      const mappedUser = {
-        id: res.data?.usuarioId ?? res.data?.id ?? null,
-        name: res.data?.nombre ?? res.data?.name ?? email,
-        email,
-        isAdmin,
-        rol: String(rol || "").toUpperCase(),
-      };
+    const res = await api.post("/api/auth/login", { email, password });
 
-      setUser(mappedUser);
-      localStorage.setItem("user", JSON.stringify(mappedUser));
+    const token = res.data?.token;
+    if (token) localStorage.setItem("token", token);
 
-      return mappedUser;
-    } catch (error) {
-      console.error("Error en login", error);
-      throw new Error(error.response?.data || "Error en login");
-    }
+    const isAdmin = Boolean(res.data?.isAdmin ?? res.data?.admin);
+
+    const mappedUser = {
+      id: res.data?.userId ?? res.data?.usuarioId ?? res.data?.id ?? null,
+      name: res.data?.nombre ?? res.data?.name ?? email,
+      email,
+      isAdmin,
+      rol: isAdmin ? "ADMIN" : "CLIENTE",
+    };
+
+    setUser(mappedUser);
+    localStorage.setItem("user", JSON.stringify(mappedUser));
+
+    return mappedUser;
   };
-  // ---------- REGISTRO ----------
+
   const register = async (name, email, password, rut, region, comuna) => {
-    try {
-      await api.post("/api/auth/registro", {
-        nombre: name,
-        email,
-        password,
-        rut,
-        region,
-        comuna,
-      });
-      return true;
-    } catch (error) {
-      console.error("Error en registro", error);
-      const msg =
-        error.response?.data ||
-        "No se pudo registrar el usuario. Inténtalo nuevamente.";
-      throw new Error(typeof msg === "string" ? msg : "Error en registro");
-    }
+    await api.post("/api/auth/registro", {
+      nombre: name,
+      email,
+      password,
+      rut,
+      region,
+      comuna,
+    });
+    return true;
   };
 
-  // ---------- CERRAR SESION ----------
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
 
   return (
