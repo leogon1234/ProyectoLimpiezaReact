@@ -14,6 +14,83 @@ export default function DetalleProducto() {
   const [quantity, setQuantity] = useState(1);
   const [tab, setTab] = useState('caracteristicas');
 
+  const buildFeatureRows = (productoActual) => {
+    if (!productoActual) return [];
+
+    const baseRows = [
+      {
+        label: 'Categoría',
+        value: productoActual.categoria || 'N/A',
+      },
+      {
+        label: 'Stock',
+        value: productoActual.stock ?? '—',
+      },
+      {
+        label: 'IVA',
+        value:
+          productoActual.iva !== undefined && productoActual.iva !== null
+            ? `${productoActual.iva}%`
+            : '—',
+      },
+    ];
+
+    const categoriaTexto = (productoActual.categoria || '').toLowerCase();
+
+    if (categoriaTexto.includes('detergent')) {
+      baseRows.push(
+        {
+          label: 'Uso recomendado',
+          value: 'Lavado de ropa y textiles, apto para uso doméstico.',
+        },
+        {
+          label: 'Tipo de fórmula',
+          value: 'Fórmula concentrada de alto rendimiento.',
+        },
+        {
+          label: 'Aroma',
+          value: 'Fragancia fresca y agradable.',
+        },
+      );
+    } else if (
+      categoriaTexto.includes('multiuso') ||
+      categoriaTexto.includes('limpiador') ||
+      categoriaTexto.includes('limpia')
+    ) {
+      baseRows.push(
+        {
+          label: 'Uso recomendado',
+          value: 'Limpieza general de superficies del hogar.',
+        },
+        {
+          label: 'Superficies compatibles',
+          value: 'Cerámica, porcelanato y superficies lavables.',
+        },
+      );
+    } else if (
+      categoriaTexto.includes('cloro') ||
+      categoriaTexto.includes('desinfect')
+    ) {
+      baseRows.push(
+        {
+          label: 'Uso recomendado',
+          value: 'Desinfección de baños, pisos y superficies de alto contacto.',
+        },
+        {
+          label: 'Precauciones',
+          value: 'Usar guantes y evitar mezclar con otros productos químicos.',
+        },
+      );
+    } else {
+      baseRows.push({
+        label: 'Uso recomendado',
+        value: 'Producto de limpieza para el hogar.',
+      });
+    }
+
+    return baseRows;
+  };
+
   if (cargando) {
     return (
       <div className="container py-4">
@@ -48,10 +125,13 @@ export default function DetalleProducto() {
   };
 
   return (
-    <div className="container py-4">
-      <div className="row g-4 align-items-start">
+    <div className="container py-4 detalle-container">
+      <div className="row g-4 align-items-center justify-content-center">
         <div className="col-md-5 text-center">
           <div className="dp-img-wrap mx-auto">
+            {producto.oferta && (
+              <span className="badge-sale">Oferta</span>
+            )}
             <img
               src={producto.img || "https://via.placeholder.com/400?text=Sin+Imagen"}
               alt={producto.nombre}
@@ -64,24 +144,44 @@ export default function DetalleProducto() {
         <div className="col-md-7">
           <div className="d-flex align-items-start justify-content-between mb-2">
             <h2 className="fw-bold mb-0">{producto.nombre}</h2>
-            <small className="text-muted ms-3">ID: {generateSku(producto.id)}</small>
           </div>
 
-          <div className="dp-price my-2">
-            {producto.oferta ? (
-              <>
+          <div className="dp-meta">
+            <span className="detalle-id">ID: {generateSku(producto.id)}</span>
+            {producto.categoria && (
+              <span className="badge rounded-pill bg-light text-secondary">
+                {producto.categoria}
+              </span>
+            )}
+            {producto.stock != null && (
+              <span
+                className={`badge rounded-pill ${
+                  producto.stock > 0 ? 'bg-success-subtle text-success' : 'bg-secondary text-light'
+                }`}
+              >
+                {producto.stock > 0 ? 'En stock' : 'Sin stock'}
+              </span>
+            )}
+          </div>
+
+          <div className="dp-price my-3">
+            <div className="d-flex flex-column">
+              <span className="dp-price-label">Precio</span>
+              {producto.oferta ? (
+                <div className="d-flex align-items-baseline gap-2">
+                  <span className="dp-price-main">
+                    ${price.toLocaleString()}
+                  </span>
+                  <span className="dp-price-old">
+                    ${producto.precio.toLocaleString()}
+                  </span>
+                </div>
+              ) : (
                 <span className="dp-price-main">
                   ${price.toLocaleString()}
                 </span>
-                <span className="text-muted text-decoration-line-through ms-2">
-                  ${producto.precio.toLocaleString()}
-                </span>
-              </>
-            ) : (
-              <span className="dp-price-main">
-                ${price.toLocaleString()}
-              </span>
-            )}
+              )}
+            </div>
           </div>
 
           <p className="text-muted mb-3">
@@ -141,20 +241,17 @@ export default function DetalleProducto() {
                 <div className="table-responsive">
                   <table className="table align-middle mb-0">
                     <tbody>
-                      <tr>
-                        <th className="text-muted fw-normal" style={{ width: 260 }}>
-                          Categoría
-                        </th>
-                        <td className="fw-semibold">{producto.categoria || 'N/A'}</td>
-                      </tr>
-                      <tr>
-                        <th className="text-muted fw-normal">Stock</th>
-                        <td className="fw-semibold">{producto.stock ?? '—'}</td>
-                      </tr>
-                      <tr>
-                        <th className="text-muted fw-normal">IVA</th>
-                        <td className="fw-semibold">{producto.iva ?? '—'}</td>
-                      </tr>
+                      {buildFeatureRows(producto).map((row, idx) => (
+                        <tr key={idx}>
+                          <th
+                            className="text-muted fw-normal"
+                            style={{ width: 260 }}
+                          >
+                            {row.label}
+                          </th>
+                          <td className="fw-semibold">{row.value}</td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>

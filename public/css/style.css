@@ -130,7 +130,7 @@ html { overflow-y: scroll; }
 .detalle-precio,
 .detalle-precio-oferta { font-size: 2.2rem; font-weight: bold; color: var(--lf-brand-dark); }
 .detalle-precio-tachado { text-decoration: line-through; color: #6c757d; font-size: 1.4rem; margin-right: 10px; }
-.detalle-id { font-size: .9rem; color: #888; margin-bottom: .5rem; }
+.detalle-id { font-size: .9rem; color: rgba(0, 0, 0, 1); margin-bottom: .5rem; }
 
 .titulo-limpifresh { text-decoration: none; color: #fff; }
 .logo-limpifresh { max-width: 150px; width: 50%; height: 100%; display: block; margin: 100px auto; }
@@ -361,15 +361,16 @@ body.mv-auth-page{
 
 /* DETALLE producto */
 .dp-img-wrap{
-  width:100%;
-  max-width:400px;
-  aspect-ratio:4/5;
-  background:#fff;
-  border:1px solid #e9ecef;
-  border-radius:12px;
-  padding:16px;
-  display:grid;
-  place-items:center;
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 4/5;
+  position: relative;
+  background: #f8f9fa;
+  border: 1px solid #edf0f2;
+  border-radius: 10px;
+  padding: 12px;
+  display: grid;
+  place-items: center;
 }
 .dp-img{
   max-width:100%;
@@ -378,32 +379,61 @@ body.mv-auth-page{
 }
 
 /* Precio destacado */
+.dp-price{
+  display:flex;
+  align-items:flex-start;
+}
 .dp-price-main{
-  color:var(--lf-brand, #3f46ff);
-  font-weight:800;
-  font-size:2rem;
+  color: rgba(0, 0, 0, 1);
+  font-weight: 700;
+  font-size: 1.7rem;
+  line-height: 1.2;
+}
+.dp-price-label{
+  font-size:.8rem;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:#6c757d;
+  margin-bottom:.2rem;
+}
+.dp-price-old{
+  font-size:1rem;
+  color:#adb5bd;
+  text-decoration:line-through;
+}
+.dp-meta{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .35rem .6rem;
+  margin-bottom: .75rem;
+  font-size: .85rem;
+  color: #6c757d;
+}
+.bg-success-subtle{
+  background-color:#d1e7dd !important;
 }
 
 /* Tabs debajo del producto */
 .dp-tabs .nav-link{
-  color:#495057 !important;
-  background:#f8f9fa;
-  border:1px solid #dee2e6;
-  border-bottom-color:transparent;
-  margin-right:.25rem;
-  font-weight:600;
-  border-top-left-radius:.5rem;
-  border-top-right-radius:.5rem;
+  color: #495057 !important;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-right: .75rem;
+  font-weight: 600;
+  border-radius: 0;
 }
 .dp-tabs .nav-link.active{
-  color:#000 !important;
-  background:#fff;
-  border-color:#dee2e6 #dee2e6 transparent;
+  color: #000 !important;
+  background: transparent;
+  border-color: transparent;
+  border-bottom-color: #3f46ff;
 }
 .dp-tab-card{
-  border:1px solid #dee2e6;
-  border-top-left-radius:0;
-  border-top-right-radius:0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .dp-tab-card table th{
