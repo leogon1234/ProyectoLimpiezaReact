@@ -145,6 +145,14 @@ export default function Admin() {
       return alert(
         "Si el producto está en oferta, debes ingresar un precio de oferta válido."
       );
+    if (oferta) {
+      const p = toInt(precio);
+      const po = toInt(precioOferta);
+      if (po >= p) {
+      return alert("El precio de oferta debe ser menor que el precio normal.");
+  }
+}
+
     let imgUrlFinal = img?.trim() || null;
     if (imgFile) {
       try {

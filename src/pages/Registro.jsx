@@ -22,8 +22,8 @@ export default function Registro() {
     comuna: '',
   });
 
-  const [error, setError] = useState(null);        
-  const [errors, setErrors] = useState({});        
+  const [error, setError] = useState(null);
+  const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false); // 👈 AGREGADO
 
   const [regiones, setRegiones] = useState([]);
@@ -36,14 +36,14 @@ export default function Registro() {
   const RUT_FORMAT_RE = /^\d{1,2}\.\d{3}\.\d{3}-[\dkK]$/;
 
   const RM_COMUNAS = [
-    'Alhué','Buin','Calera de Tango','Cerrillos','Cerro Navia','Colina','Conchalí','Curacaví',
-    'El Bosque','El Monte','Estación Central','Huechuraba','Independencia','Isla de Maipo',
-    'La Cisterna','La Florida','La Granja','La Pintana','La Reina','Lampa','Las Condes',
-    'Lo Barnechea','Lo Espejo','Lo Prado','Macul','Maipú','María Pinto','Melipilla',
-    'Padre Hurtado','Paine','Pedro Aguirre Cerda','Peñaflor','Peñalolén','Pirque','Providencia',
-    'Pudahuel','Puente Alto','Quilicura','Quinta Normal','Recoleta','Renca','San Bernardo',
-    'San Joaquín','San José de Maipo','San Miguel','San Pedro','San Ramón','Santiago',
-    'Talagante','Tiltil','Vitacura'
+    'Alhué', 'Buin', 'Calera de Tango', 'Cerrillos', 'Cerro Navia', 'Colina', 'Conchalí', 'Curacaví',
+    'El Bosque', 'El Monte', 'Estación Central', 'Huechuraba', 'Independencia', 'Isla de Maipo',
+    'La Cisterna', 'La Florida', 'La Granja', 'La Pintana', 'La Reina', 'Lampa', 'Las Condes',
+    'Lo Barnechea', 'Lo Espejo', 'Lo Prado', 'Macul', 'Maipú', 'María Pinto', 'Melipilla',
+    'Padre Hurtado', 'Paine', 'Pedro Aguirre Cerda', 'Peñaflor', 'Peñalolén', 'Pirque', 'Providencia',
+    'Pudahuel', 'Puente Alto', 'Quilicura', 'Quinta Normal', 'Recoleta', 'Renca', 'San Bernardo',
+    'San Joaquín', 'San José de Maipo', 'San Miguel', 'San Pedro', 'San Ramón', 'Santiago',
+    'Talagante', 'Tiltil', 'Vitacura'
   ].sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
 
   const cleanRut = (rut) => rut.replace(/[.\-]/g, '').toUpperCase();
@@ -173,7 +173,11 @@ export default function Registro() {
       );
       navigate('/login');
     } catch (err) {
-      setError(err.message || 'Ocurrió un error al registrar.');
+      const msg =
+        err?.response?.data?.error ||
+        err?.response?.data ||
+        err?.message || "Ocurrió un error al registrar.";
+      setError(typeof msg === "string" ? msg : "Ocurrió un error al registrar.");
     }
   };
 

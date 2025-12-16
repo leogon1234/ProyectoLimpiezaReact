@@ -27,7 +27,7 @@ export default function Products() {
         categoriaSeleccionada === "Todas" ||
         p.categoria === categoriaSeleccionada;
 
-      const coincideTexto = !texto? true: (p.nombre ?? "").toLowerCase().includes(texto);
+      const coincideTexto = !texto? true: (p.nombre ?? "").toLowerCase().startsWith(texto);
       return coincideCategoria && coincideTexto;
     });
   }, [productos, categoriaSeleccionada, busqueda]);

@@ -32,13 +32,27 @@ export default function Login() {
         navigate('/home');
       }
     } catch (err) {
-      setError(err.message);
+      const status = err?.response?.status;
+      const backendMsg =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        (typeof err?.response?.data === "string" ? err.response.data : null);
+
+      if (status === 401) {
+        setError("Correo o contraseña incorrectos.");
+      } else if (status === 403) {
+        setError("No tienes permisos para ingresar.");
+      } else if (backendMsg) {
+        setError(backendMsg);
+      } else {
+        setError("Error de conexión con el servidor.");
+      }
     }
   };
 
   return (
     <>
- 
+
       <style>{`
         body.mv-auth-page header:not(.lf-auth-header) { 
           display: none !important; 
